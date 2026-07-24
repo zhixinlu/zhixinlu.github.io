@@ -3,25 +3,818 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Placeholder — replace with your talk index.html</title>
+<title>Attention as Energy Landscape Hopping</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.1/plotly.min.js"></script>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 <style>
-  body{font-family:Georgia,serif;background:#0b0e14;color:#e8eaf0;display:flex;
-       align-items:center;justify-content:center;height:100vh;margin:0;padding:24px;text-align:center}
-  .box{max-width:640px}
-  code{background:#161b26;padding:2px 6px;border-radius:4px;color:#f3c76b}
-  a{color:#7fd7ff}
+:root {
+  --bg: #fafaf9; --fg: #1c1917; --accent: #0f766e; --accent2: #b45309;
+  --muted: #78716c; --border: #d6d3d1; --card: #fff; --code: #f5f5f4;
+  --teal-light: #f0fdfa; --orange-light: #fffbeb;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+       background: var(--bg); color: var(--fg); line-height: 1.7; }
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* Hero */
+.hero { background: linear-gradient(135deg, #0e1b3a 0%, #134e4a 100%);
+        color: #e5e7eb; padding: 60px 0 50px; text-align: center; }
+.hero h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px;
+           font-family: 'Palatino Linotype', Georgia, serif; }
+.hero .subtitle { font-size: 16px; color: #94a3b8; max-width: 640px; margin: 0 auto 18px; }
+.hero .author { font-size: 14px; color: #cbd5e1; }
+.hero .author a { color: #5eead4; text-decoration: none; }
+
+/* Nav */
+nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 0;
+      position: sticky; top: 0; z-index: 100; }
+nav .container { display: flex; gap: 24px; font-size: 13px; }
+nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+nav a:hover { text-decoration: underline; }
+
+/* Sections */
+section { padding: 40px 0; }
+section + section { border-top: 1px solid var(--border); }
+h2 { font-size: 24px; color: var(--accent); margin-bottom: 16px; font-weight: 700; }
+h3 { font-size: 18px; color: var(--fg); margin: 28px 0 12px; font-weight: 700; }
+p { margin-bottom: 14px; }
+.eq-box { background: var(--teal-light); border: 1px solid #99f6e4; border-radius: 6px;
+          padding: 16px 20px; margin: 16px 0; overflow-x: auto; }
+.eq-box.orange { background: var(--orange-light); border-color: #fed7aa; }
+.remark { background: var(--code); border-left: 4px solid var(--accent); padding: 14px 18px;
+          margin: 16px 0; border-radius: 0 6px 6px 0; font-size: 15px; }
+.remark b { color: var(--accent); }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+th { background: #0e1b3a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--code); }
+
+/* Demo section */
+.demo-section { background: #f1f5f9; padding: 40px 0; }
+.demo-wrap { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+.demo-header { text-align: center; margin-bottom: 20px; }
+.demo-header h2 { font-family: 'Palatino Linotype', Georgia, serif; }
+
+/* Chain diagram */
+.chain { background: var(--teal-light); border: 1px solid #99f6e4; border-radius: 8px;
+         padding: 14px 20px; margin: 20px auto; max-width: 960px; font-size: 14px; line-height: 2.0; }
+.chain .step { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.chain .label { font-weight: 700; color: var(--muted); width: 190px; flex-shrink: 0; font-size: 13px; }
+.chain .pill { background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-family: monospace; }
+.chain .pill.green { background: #dcfce7; color: #166534; }
+.chain .pill.red { background: #fee2e2; color: #991b1b; }
+.chain .pill.orange { background: #ffedd5; color: #9a3412; }
+
+/* Demo controls */
+.demo-container { display: flex; height: 620px; border: 1px solid var(--border); border-radius: 8px;
+                  overflow: hidden; background: var(--card); }
+.demo-panel { width: 290px; padding: 14px; overflow-y: auto; flex-shrink: 0;
+              border-right: 1px solid var(--border); font-family: 'Segoe UI', Calibri, sans-serif; font-size: 13px; }
+.demo-panel h4 { font-size: 11px; color: var(--muted); text-transform: uppercase;
+                 letter-spacing: 2px; margin: 12px 0 6px; }
+.demo-panel select { width: 100%; padding: 5px; font-size: 12px; border: 1px solid var(--border);
+                     border-radius: 4px; margin-bottom: 6px; }
+.slider-row { display: flex; align-items: center; gap: 5px; margin: 3px 0; }
+.slider-row label { font-size: 11px; width: 22px; flex-shrink: 0; }
+.slider-row input[type=range] { flex: 1; height: 14px; }
+.slider-row .val { font-size: 11px; width: 38px; text-align: right; color: var(--accent); font-weight: 600; }
+.token-card { background: var(--code); border: 1px solid var(--border); border-radius: 5px;
+              padding: 8px; margin-bottom: 6px; font-size: 12px; }
+.token-card.active { border-color: var(--accent); background: var(--teal-light); }
+.token-card.generated { border-color: var(--accent2); background: var(--orange-light); }
+.token-card .title { font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.badge { font-size: 8px; padding: 2px 5px; border-radius: 8px; color: #fff; }
+.badge-initial { background: var(--accent); }
+.badge-generated { background: var(--accent2); }
+.badge-query { background: #9d174d; }
+.btn { display: block; width: 100%; padding: 8px; border: none; border-radius: 5px;
+       font-size: 12px; font-weight: 700; cursor: pointer; margin: 4px 0; }
+.btn-step { background: var(--accent); color: #fff; }
+.btn-step:hover { background: #0d6b63; }
+.btn-step:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn-back { background: #1e40af; color: #fff; }
+.btn-back:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn-restore { background: var(--accent2); color: #fff; }
+.btn-restore:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn-reset { background: var(--border); color: var(--fg); }
+.btn-scale { background: #7c3aed; color: #fff; }
+.btn-scale.active { background: #059669; }
+.info-box { background: var(--code); border: 1px solid var(--border); border-radius: 5px;
+            padding: 7px 9px; margin-top: 6px; font-size: 10px; line-height: 1.4; color: var(--muted); }
+.info-box b { color: var(--accent); }
+.step-indicator { font-size: 12px; font-weight: 700; color: var(--accent); margin: 5px 0; }
+.plot-area { flex: 1; display: flex; }
+.plot-area > div { flex: 1; }
+.plot-2d { width: 38%; border-left: 1px solid var(--border); }
+
+/* Guide */
+.guide { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+.guide h3 { font-family: 'Palatino Linotype', Georgia, serif; color: var(--accent); }
+.guide p { font-size: 15px; }
+.guide ul { margin: 8px 0 14px 24px; font-size: 15px; }
+.guide li { margin-bottom: 6px; }
+
+/* Footer */
+footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 13px;
+         border-top: 1px solid var(--border); }
+footer a { color: var(--accent); }
 </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Drop your talk page here</h1>
-    <p>Replace this file (<code>blog/attention-energy-landscape/essay.html</code>) with the
-       <code>index.html</code> you created for the Santa Fe Institute talk
-       (the "Attention as Energy Landscape Hopping" page from your Downloads folder).</p>
-    <p>Once replaced, it will appear embedded on the
-       <a href="index.html">blog post page</a> and open full-screen from the "Open full-screen" button.</p>
-    <p style="margin-top:24px">In the meantime, the interactive landscape visualization is available here:
-       <a href="visualization.html">Synchronize-or-Hop visualization &rarr;</a></p>
+
+<!-- =================== HERO =================== -->
+<div class="hero">
+  <div class="container">
+    <h1>Attention as Energy Landscape Hopping</h1>
+    <p class="subtitle">The standard self-attention output is a hop along the normal of an energy surface — a geometric picture that makes the algebra transparent</p>
+    <p class="author">Zhixin Lu &nbsp;·&nbsp; Allen Institute &nbsp;·&nbsp; <a href="#">SFI Seminar, 2026</a></p>
   </div>
+</div>
+
+<!-- =================== NAV =================== -->
+<nav>
+  <div class="container">
+    <a href="#attention">§1 Self-Attention</a>
+    <a href="#energy">§2 The Energy</a>
+    <a href="#hop">§3 The Hop</a>
+    <a href="#variants">§4 Variants</a>
+    <a href="#demo">§5 Demo</a>
+    <a href="#guide">§6 Guide</a>
+  </div>
+</nav>
+
+<!-- =================== SECTION 1: SELF-ATTENTION =================== -->
+<section id="attention">
+<div class="container">
+
+<h2>§1. Self-Attention: The Algebra</h2>
+
+<p>We start from the standard single-head causal self-attention, stated in a form that will connect directly to the energy landscape.</p>
+
+<h3>1.1 Setup</h3>
+<p>Consider a single attention head with $d_{\text{model}} = d_k = d$. The input sequence is $\boldsymbol{x}_0, \boldsymbol{x}_1, \ldots, \boldsymbol{x}_t \in \mathbb{R}^{1 \times d}$ (row vectors), stacked into the <b>token matrix</b></p>
+
+$$X \;=\; \begin{bmatrix} \boldsymbol{x}_0 \\ \boldsymbol{x}_1 \\ \vdots \\ \boldsymbol{x}_t \end{bmatrix} \in \mathbb{R}^{(t+1) \times d}.$$
+
+<p>The learnable weight matrices are $W_Q, W_K, W_V \in \mathbb{R}^{d \times d}$. Define the combined key-query matrix $M = W_Q\, W_K^\top$ and the <b>transformed token matrix</b></p>
+
+$$\tilde{Y} \;=\; X\, W_K\, W_Q^\top \;=\; X\, M^\top \in \mathbb{R}^{(t+1) \times d}.$$
+
+<p>Row $\tau$ of $\tilde{Y}$ is $\tilde{\boldsymbol{y}}_\tau = \boldsymbol{x}_\tau M^\top$, the basin center for token $\tau$.</p>
+
+<h3>1.2 The attention output</h3>
+<p>In the standard formulation, the query, key, and value vectors are $\boldsymbol{q}_t = \boldsymbol{x}_t W_Q$, $K = X W_K$, $V = X W_V$. The self-attention output at position $t$ is</p>
+
+<div class="eq-box">
+$$\boldsymbol{o}_t \;=\; \underbrace{\mathrm{softmax}\!\left(\frac{\boldsymbol{x}_t\, W_Q\, W_K^\top\, X^\top}{\sqrt{d_k}}\right)}_{\displaystyle \boldsymbol{a} \;\in\; \mathbb{R}^{1 \times (t+1)}}\; X\, W_V,$$
+</div>
+
+<p>where $\mathrm{softmax}$ is applied across the row (over the token index $\tau = 0, \ldots, t$). Since $W_Q W_K^\top = M$ and $\tilde{Y} = X M^\top$, the score vector is $\boldsymbol{x}_t\,M\,X^\top = \boldsymbol{x}_t\,\tilde{Y}^\top$. Writing $\beta = 1/\sqrt{d_k}$, the output becomes</p>
+
+$$\boldsymbol{o}_t \;=\; \boldsymbol{a}\,X\,W_V, \qquad a \;=\; \mathrm{softmax}\bigl(\beta\, \boldsymbol{x}_t\,\tilde{Y}^\top\bigr) \;\in\; \mathbb{R}^{1 \times (t+1)}.$$
+
+<p>The output $\boldsymbol{o}_t$ is a softmax-weighted average of $\boldsymbol{x}_\tau W_V$, where the weights $a$ depend on the dot product between the query $\boldsymbol{x}_t$ and the rows of $\tilde{Y}$.</p>
+
+<p>This is the formula everyone knows. The question is: <b>what is this computation actually doing, geometrically?</b></p>
+
+</div>
+</section>
+
+<!-- =================== SECTION 2: ENERGY =================== -->
+<section id="energy">
+<div class="container">
+
+<h2>§2. Attention = CCCP on an Energy Landscape</h2>
+
+<p>The key observation is that the attention weights $a$ and the weighted combination $\boldsymbol{a}\,\tilde{Y}$ arise naturally as a single step of the <b>Concave-Convex Procedure</b> (CCCP) on a specific energy function. The argument proceeds in three steps: (1) recognize that softmax is the gradient of a concave function, (2) add a convex bowl to get an energy whose density is a Gaussian mixture, (3) observe that the CCCP on this energy reproduces the attention formula.</p>
+
+<h3>2.1 Softmax is the gradient of log-sum-exp</h3>
+<p>The starting point is a well-known identity. Define the <b>log-sum-exp</b> (lse) function</p>
+
+$$\mathrm{lse}(\boldsymbol{\xi}) \;=\; \beta^{-1}\log\sum_{\tau \le t} \exp\!\bigl(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau\bigr).$$
+
+<p>This is a smooth, <b>convex</b> function of $\boldsymbol{\xi}$ (it is the log-partition function of a categorical distribution). Its gradient is</p>
+
+<div class="eq-box">
+$$\nabla_\boldsymbol{\xi}\, \mathrm{lse}(\boldsymbol{\xi}) \;=\; \frac{\sum_\tau \exp(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)\;\tilde{\boldsymbol{y}}_\tau}{\sum_\tau \exp(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)} \;=\; \sum_\tau a_\tau\, \tilde{\boldsymbol{y}}_\tau \;=\; \boldsymbol{a}\,\tilde{Y},$$
+</div>
+
+<p>where $a_\tau = \mathrm{softmax}_\tau(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)$. In other words: <b>the softmax-weighted average of the $\tilde{\boldsymbol{y}}_\tau$ is the gradient of the lse function</b>. This is the link between the attention formula and an energy landscape.</p>
+
+<h3>2.2 The energy function: lse + bowl = GMM</h3>
+<p>Since $\mathrm{lse}$ is convex, $-\mathrm{lse}$ is <b>concave</b>. Set $E_{\mathrm{cave}}(\boldsymbol{\xi}) = -\mathrm{lse}(\boldsymbol{\xi})$ and add a convex bowl $\frac{1}{2}\|\boldsymbol{\xi}\|^2$ to define the energy</p>
+
+$$E_t(\boldsymbol{\xi}) \;=\; \underbrace{-\mathrm{lse}(\boldsymbol{\xi})}_{\displaystyle E_{\mathrm{cave}}(\boldsymbol{\xi})\;\text{(concave)}} \;+\; \underbrace{\frac{1}{2}\|\boldsymbol{\xi}\|^2}_{\displaystyle\text{bowl (convex)}} \;=\; -\beta^{-1}\log\sum_\tau \exp\!\bigl(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau\bigr) \;+\; \frac{1}{2}\|\boldsymbol{\xi}\|^2.$$
+
+<p>By the polarization identity — $\exp(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau) = e^{\frac{\beta}{2}\|\boldsymbol{\xi}\|^2}\, e^{-\frac{\beta}{2}\|\boldsymbol{\xi} - \tilde{\boldsymbol{y}}_\tau\|^2}\, e^{\frac{\beta}{2}\|\tilde{\boldsymbol{y}}_\tau\|^2}$ — the $\frac{1}{2}\|\boldsymbol{\xi}\|^2$ bowl and the $-\frac{1}{2}\|\boldsymbol{\xi}\|^2$ from polarization cancel, and the energy becomes</p>
+
+$$E_t(\boldsymbol{\xi}) \;=\; -\beta^{-1}\log\sum_{\tau} \pi_\tau\,\exp\!\Bigl(-\tfrac{\beta}{2}\|\boldsymbol{\xi} - \tilde{\boldsymbol{y}}_\tau\|^2\Bigr),$$
+
+<p>where $\pi_\tau = \exp\!\bigl(\tfrac{\beta}{2}\|\tilde{\boldsymbol{y}}_\tau\|^2\bigr)$. This is the <b>negative log-density of a Gaussian mixture model</b> with one Gaussian per token, centered at the transformed position $\tilde{\boldsymbol{y}}_\tau$. The $\frac{1}{2}\|\boldsymbol{\xi}\|^2$ bowl is essential: it is what turns the lse into a GMM.</p>
+
+<h3>2.3 CCCP on this energy recovers the attention formula</h3>
+<p>The CCCP is a standard procedure for decreasing functions that decompose as convex + concave. For our energy $E_t(\boldsymbol{\xi}) = \underbrace{\frac{1}{2}\|\boldsymbol{\xi}\|^2}_{E_{\mathrm{convex}}} + E_{\mathrm{cave}}(\boldsymbol{\xi})$, the CCCP update rule is</p>
+
+$$\nabla E_{\mathrm{convex}}(\tilde{\boldsymbol{x}}_{t+1}) \;=\; -\nabla E_{\mathrm{cave}}(\boldsymbol{x}_t),$$
+
+<p>which evaluates the concave gradient at the <em>current</em> point $\boldsymbol{x}_t$ and matches it to the convex gradient at the <em>next</em> point $\tilde{\boldsymbol{x}}_{t+1}$. This is guaranteed to decrease (or maintain) the energy at each step.</p>
+
+<p>Now the choice of $\frac{1}{2}\|\boldsymbol{\xi}\|^2$ as the convex part becomes essential: its gradient is simply $\nabla E_{\mathrm{convex}}(\boldsymbol{\xi}) = \boldsymbol{\xi}$. So the CCCP rule becomes</p>
+
+$$\tilde{\boldsymbol{x}}_{t+1} \;=\; -\nabla E_{\mathrm{cave}}(\boldsymbol{x}_t).$$
+
+<p><b>The landing point $\tilde{\boldsymbol{x}}_{t+1}$ appears directly on the left-hand side</b> — no extra transformation needed. A different convex term (say $\frac{1}{2}\boldsymbol{\xi}^\top A\boldsymbol{\xi}$) would give $A\tilde{\boldsymbol{x}}_{t+1} = -\nabla E_{\mathrm{cave}}$, requiring an inversion.</p>
+
+<p>Since the full gradient is $\nabla E_t(\boldsymbol{\xi}) = \boldsymbol{\xi} + \nabla E_{\mathrm{cave}}(\boldsymbol{\xi})$, we can also write the update as</p>
+
+$$\tilde{\boldsymbol{x}}_{t+1} \;=\; \boldsymbol{x}_t - \nabla E_t(\boldsymbol{x}_t).$$
+
+<p>So in our case, the CCCP update happens to coincide with one full gradient descent step on $E_t$ (with step size 1) — a consequence of the Hessian being $I$.</p>
+
+<p>Now using §2.1 — the fact that $-\nabla E_{\mathrm{cave}} = \nabla\,\mathrm{lse}$ is the softmax-weighted average — we get</p>
+
+$$\tilde{\boldsymbol{x}}_{t+1} \;=\; \nabla\,\mathrm{lse}(\boldsymbol{x}_t) \;=\; \boldsymbol{a}\,\tilde{Y}.$$
+
+<p><b>This is exactly the core computation of self-attention</b>: the softmax-weighted average of the transformed tokens.</p>
+
+<div class="remark">
+<b>The chain of reasoning.</b> Softmax is the gradient of lse (§2.1). Negating lse gives a concave function $E_{\mathrm{cave}}$. Adding the bowl $\frac{1}{2}\|\boldsymbol{\xi}\|^2$ produces an energy whose density is a GMM (§2.2). The CCCP on this energy — equivalently, one gradient descent step — uses $-\nabla E_{\mathrm{cave}} = \nabla\,\mathrm{lse} = \mathrm{softmax}$-weighted average, which is precisely the attention computation (§2.3). The bowl is what makes it a GMM; the lse is what makes it attention.
+</div>
+
+<h3>2.4 Connecting the attention formula to the energy landscape</h3>
+<p>To see how the standard attention output relates to the energy landscape, we rewrite the attention formula by substituting $X = \tilde{Y}\,(W_K W_Q^\top)^{-1}$ (valid when $M$ is invertible; the rank-deficient case is handled in §2.5):</p>
+
+$$\boldsymbol{o}_t \;=\; \mathrm{softmax}\!\bigl(\beta\, \boldsymbol{x}_t\,\tilde{Y}^\top\bigr)\;\cdot\; \underbrace{\tilde{Y}\,(W_K W_Q^\top)^{-1}}_{= \;X}\;\cdot\; W_V.$$
+
+<p>Now group the first two factors:</p>
+
+<div class="eq-box orange">
+$$\boldsymbol{o}_t \;=\; \underbrace{\mathrm{softmax}\!\bigl(\beta\, \boldsymbol{x}_t\,\tilde{Y}^\top\bigr)\;\tilde{Y}}_{\displaystyle = \;\boldsymbol{a}\,\tilde{Y}\; =\; \tilde{\boldsymbol{x}}_{t+1}\;\text{(CCCP landing)}}\;\cdot\;\underbrace{(W_K W_Q^\top)^{-1}\, W_V}_{\displaystyle\text{fixed readout matrix}}.$$
+</div>
+
+<p>This decomposition is the key insight. The attention output factors into two stages:</p>
+
+<div class="remark">
+<b>Stage 1 (landscape hop).</b> The product $\boldsymbol{a}\,\tilde{Y} = \tilde{\boldsymbol{x}}_{t+1}$ is the CCCP landing point on the energy landscape — the softmax-weighted average of the basin centers. This is where the nonlinear, query-dependent selection happens.<br><br>
+<b>Stage 2 (linear readout).</b> The matrix $(W_K W_Q^\top)^{-1} W_V$ is a fixed linear map that transforms the landing point into the output. It maps from the "landscape space" (where the basins live) back to the "output space."
+</div>
+
+<p>In words: <b>standard self-attention is one CCCP step on the energy $E_t$, followed by a fixed linear readout.</b></p>
+
+<h3>2.5 When $M$ is not invertible ($d_k < d_{\text{model}}$)</h3>
+<p>In practice, $W_Q, W_K \in \mathbb{R}^{d_{\text{model}} \times d_k}$ with $d_k < d_{\text{model}}$, so $M = W_Q W_K^\top$ has rank $\leq d_k$ and the substitution $X = \tilde{Y}\,(W_K W_Q^\top)^{-1}$ used in §2.4 is not valid. Does the geometric picture survive?</p>
+
+<p>Yes. Replace the inverse with the <b>pseudo-inverse</b> $(W_K W_Q^\top)^\dagger$, and the factorization becomes</p>
+
+<div class="eq-box">
+$$\boldsymbol{o}_t \;=\; \underbrace{\boldsymbol{a}\,\tilde{Y}\,(W_K W_Q^\top)^\dagger\, W_V}_{\text{landscape-determined part}} \;+\; \underbrace{\boldsymbol{a}\,X\,(I - P)\,W_V}_{\text{residual}},$$
+</div>
+
+<p>where $P = M^\top (M^\top)^\dagger$ is the orthogonal projector onto $\mathrm{col}(M^\top)$. The first term is what the hop determines — Stage 1 ($\boldsymbol{a}\,\tilde{Y}$) followed by Stage 2 (readout via pseudo-inverse). The second term is a linear function of $\boldsymbol{a}\,X$ that lives in the null space of $M^\top$ — it does not participate in basin selection and cannot be "seen" by the landscape. When $M$ is full rank, $P = I$ and the residual vanishes, recovering §2.4 exactly.</p>
+
+<div class="remark">
+<b>The essential point.</b> The geometric picture — build landscape, hop, select weights — governs the <em>weight vector</em> $a$, which is rank-independent. The landscape lives in the $d_k$-dimensional "key-query subspace" $\mathrm{col}(M^\top)$; the output lives in the full $d_{\text{model}}$-dimensional token space. The connection between them is $a$, which the landscape determines completely.
+</div>
+
+</div>
+</section>
+
+<!-- =================== SECTION 3: HOP =================== -->
+<section id="hop">
+<div class="container">
+
+<h2>§3. The CCCP Step Is a Hop Along the Surface Normal</h2>
+
+<p>The CCCP update $\tilde{\boldsymbol{x}}_{t+1} = \boldsymbol{x}_t - \nabla E_t(\boldsymbol{x}_t)$ has a striking geometric meaning that arises from one special property of our energy: <b>the convex part has Hessian equal to the identity</b> (it is $\frac{1}{2}\|\boldsymbol{\xi}\|^2$). This means the CCCP step size is exactly 1 in the "right" sense, which leads to the following construction.</p>
+
+<h3>3.1 The construction</h3>
+<p>Consider the graph of $E_t$ as a surface $\Gamma = \{(\boldsymbol{\xi}, E_t(\boldsymbol{\xi}))\} \subset \mathbb{R}^{d+1}$. At the point $(\boldsymbol{x}_t, E_t(\boldsymbol{x}_t))$ on this surface, the <b>upward unit normal</b> is</p>
+
+$$\hat{\boldsymbol{n}}(\boldsymbol{x}_t) \;=\; \frac{1}{\sqrt{1 + \|\nabla E_t(\boldsymbol{x}_t)\|^2}}\,\bigl(-\nabla E_t(\boldsymbol{x}_t),\; 1\bigr).$$
+
+<p>Now perform the following two-step procedure:</p>
+
+<div class="remark">
+<b>Hop.</b> Starting at $(\boldsymbol{x}_t, E_t(\boldsymbol{x}_t))$ on the surface, walk along $\hat{\boldsymbol{n}}$ until the <b>vertical coordinate has risen by exactly 1</b>. Call the resulting point in $\mathbb{R}^{d+1}$ the "top of the hop."<br><br>
+<b>Drop.</b> From the top of the hop, drop vertically back to the energy surface.
+</div>
+
+<p><b>Claim:</b> the horizontal projection of the top of the hop is exactly $\tilde{\boldsymbol{x}}_{t+1} = \boldsymbol{x}_t - \nabla E_t(\boldsymbol{x}_t)$, the CCCP landing point.</p>
+
+<h3>3.2 Why it works</h3>
+<p>The height rise of 1 requires walking a distance $L = \sqrt{1 + \|\nabla E_t\|^2}$ along $\hat{\boldsymbol{n}}$ (since the vertical component of $\hat{\boldsymbol{n}}$ is $1/\sqrt{1 + \|\nabla E_t\|^2}$). The horizontal displacement is then</p>
+
+$$L \cdot \bigl(-\nabla E_t / \sqrt{1 + \|\nabla E_t\|^2}\bigr) \;=\; -\nabla E_t(\boldsymbol{x}_t).$$
+
+<p>Adding this to $\boldsymbol{x}_t$ gives $x_t - \nabla E_t(\boldsymbol{x}_t) = \tilde{\boldsymbol{x}}_{t+1}$. The crucial point: the height rise is exactly 1 <b>because the bowl has Hessian $I$</b>. A different convex term would give a different rise, and the construction would not produce the CCCP update.</p>
+
+<p>Note that the vertical <b>drop</b> from the top of the hop back to the surface is <em>not</em> 1 — it depends on the shape of the landscape at the landing point and is typically much larger than 1.</p>
+
+<h3>3.3 The complete picture</h3>
+<p>Putting it all together, each autoregressive step of self-attention is:</p>
+
+<div class="eq-box">
+<p style="margin:0;line-height:2">
+<b>①</b> Build the energy landscape $E_t(\boldsymbol{\xi})$ from all past tokens $\tilde{\boldsymbol{y}}_0, \ldots, \tilde{\boldsymbol{y}}_t$.<br>
+<b>②</b> At the query $\boldsymbol{x}_t$ on the surface, hop along the upward normal until the elevation has increased by 1.<br>
+<b>③</b> Drop vertically to the surface. The horizontal projection of this hop is $\tilde{\boldsymbol{x}}_{t+1}$.<br>
+<b>④</b> Apply the fixed linear readout $(M^\top)^{-1} W_V$ to get $\boldsymbol{o}_t = \boldsymbol{x}_{t+1}$.
+</p>
+</div>
+
+<p>The landscape is reconstructed from scratch at every time step (with one more basin as each token is added), and the query hops across it to select the next state. This is why we call the mechanism <b>energy landscape hopping</b>.</p>
+
+</div>
+</section>
+
+<!-- =================== SECTION 4: VARIANTS =================== -->
+<section id="variants">
+<div class="container">
+
+<h2>§4. Variant Kernels: Tanh and Linear</h2>
+
+<p>In §2 we showed that the standard softmax attention is a CCCP step on an energy landscape. A natural question: <b>what happens if we replace the softmax with a different nonlinearity?</b> We can answer this by reverse-engineering the energy function — starting from the attention equation, then asking: "what energy has this update as its CCCP?"</p>
+
+<h3>4.1 The tanh case: replace softmax with tanh</h3>
+
+<p>We follow the same logic as §2. In §2 the key was: <em>softmax is the gradient of lse</em>. Here the parallel question is: <b>tanh is the gradient of what?</b></p>
+
+<p><b>Step 1: tanh is the gradient of $\beta^{-1}\log\cosh$.</b> The identity $\frac{d}{du}\log\cosh(u) = \tanh(u)$ gives</p>
+
+$$\frac{\partial}{\partial \boldsymbol{\xi}_j}\,\beta^{-1}\sum_\tau \log\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau) \;=\; \sum_\tau \tanh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)\,[\tilde{\boldsymbol{y}}_\tau]_j.$$
+
+<p>So $\sum_\tau \tanh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)\,\tilde{\boldsymbol{y}}_\tau = \tilde{Y}^\top \tanh(\beta\,\tilde{Y}\,\boldsymbol{\xi})$ is the gradient of $\beta^{-1}\sum_\tau \log\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)$, exactly paralleling the softmax case.</p>
+
+<p><b>Step 2: set $E_{\mathrm{cave}} = -\beta^{-1}\sum_\tau \log\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)$ and add the bowl.</b></p>
+
+<div class="eq-box">
+$$E_t^{\mathrm{tanh}}(\boldsymbol{\xi}) \;=\; \frac{1}{2}\|\boldsymbol{\xi}\|^2 \;-\; \beta^{-1}\sum_\tau \log\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau).$$
+</div>
+
+<p><b>Step 3: expand cosh to reveal the modes.</b> Using $\sum_\tau \log\cosh = \log\prod_\tau\cosh$, expand each factor:</p>
+
+$$\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau) \;=\; \tfrac{1}{2}\bigl(e^{+\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau} + e^{-\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau}\bigr).$$
+
+<p>Each $\cosh$ contributes <b>two terms</b>: one for $+\tilde{\boldsymbol{y}}_\tau$ and one for $-\tilde{\boldsymbol{y}}_\tau$. Taking the product over all $n$ tokens, each token independently chooses $+$ or $-$, giving $2^n$ configurations:</p>
+
+$$\prod_\tau \cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau) \;=\; \frac{1}{2^n}\sum_{\varepsilon \in \{-1,+1\}^n} \exp\!\left(\beta\,\boldsymbol{\xi}^\top \sum_\tau \varepsilon_\tau\, \tilde{\boldsymbol{y}}_\tau\right).$$
+
+<p>Define the $2^n$ <b>mode centers</b> $\boldsymbol{z}_\varepsilon = \sum_\tau \varepsilon_\tau\,\tilde{\boldsymbol{y}}_\tau$. The $\beta^{-1}\log$ of this product is $\beta^{-1}\log\sum_\varepsilon \exp(\beta\,\boldsymbol{\xi}^\top \boldsymbol{z}_\varepsilon) - n\log 2/\beta$, which is the lse function evaluated at the $2^n$ mode centers (plus a constant). By the same polarization as §2.2:</p>
+
+<div class="eq-box orange">
+$$E_t^{\mathrm{tanh}}(\boldsymbol{\xi}) \;=\; -\beta^{-1}\log\sum_{\varepsilon \in \{-1,+1\}^n}\; \pi_\varepsilon\,e^{-\frac{\beta}{2}\|\boldsymbol{\xi} - \boldsymbol{z}_\varepsilon\|^2} \;+\; \frac{n\log 2}{\beta}, \qquad \boldsymbol{z}_\varepsilon = \sum_\tau \varepsilon_\tau\,\tilde{\boldsymbol{y}}_\tau.$$
+</div>
+
+<p>This is <b>exactly the same GMM form as the softmax energy</b>, but summing over $2^n$ mode centers $\boldsymbol{z}_\varepsilon$ instead of $n$ centers $\tilde{\boldsymbol{y}}_\tau$. The $\beta$ appears in the same places: $\beta^{-1}$ outside the log, $\beta/2$ inside each Gaussian. For $n = 2$ tokens: $2^2 = 4$ modes at $\tilde{\boldsymbol{y}}_0 + \tilde{\boldsymbol{y}}_1$, $\tilde{\boldsymbol{y}}_0 - \tilde{\boldsymbol{y}}_1$, $-\tilde{\boldsymbol{y}}_0 + \tilde{\boldsymbol{y}}_1$, $-\tilde{\boldsymbol{y}}_0 - \tilde{\boldsymbol{y}}_1$ — the vertices of a parallelogram.</p>
+
+<p><b>Step 4: the CCCP.</b> $\tilde{\boldsymbol{x}}_{t+1} = -\nabla E_{\mathrm{cave}}(\boldsymbol{x}_t) = \tilde{Y}^\top \tanh(\beta\,\tilde{Y}\,\boldsymbol{x}_t) = \sum_\tau \tanh(\beta\,\boldsymbol{x}_t^\top \tilde{\boldsymbol{y}}_\tau)\,\tilde{\boldsymbol{y}}_\tau$.</p>
+
+<div class="remark">
+<b>The parallel.</b><br>
+Softmax: $E = -\beta^{-1}\log\sum_\tau \pi_\tau\, e^{-\frac{\beta}{2}\|\boldsymbol{\xi} - \tilde{\boldsymbol{y}}_\tau\|^2}$ → <b>$n$ modes</b>. Landing: $\boldsymbol{a}\,\tilde{Y}$.<br>
+Tanh: $E = -\beta^{-1}\log\sum_\varepsilon \pi_\varepsilon\, e^{-\frac{\beta}{2}\|\boldsymbol{\xi} - \boldsymbol{z}_\varepsilon\|^2} + \mathrm{const}$ → <b>$2^n$ modes</b>. Landing: $\tilde{Y}^\top\tanh(\beta\,\tilde{Y}\,\boldsymbol{x}_t)$.<br>
+Identical GMM structure; only the mode centers and their count differ.
+</div>
+
+<h3>4.2 The linear case: remove the softmax entirely</h3>
+
+<p>The same logic one more time. If we remove the softmax, the raw scores $\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau$ are used directly as weights: $\tilde{\boldsymbol{x}}_{t+1} = \sum_\tau \beta(\boldsymbol{x}_t^\top \tilde{\boldsymbol{y}}_\tau)\,\tilde{\boldsymbol{y}}_\tau = \beta\,\tilde{Y}^\top \tilde{Y}\,\boldsymbol{x}_t$. <b>This linear map is the gradient of what?</b></p>
+
+$$\nabla_{\boldsymbol{\xi}} \;\tfrac{\beta}{2}\sum_\tau (\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)^2 \;=\; \beta\sum_\tau (\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)\,\tilde{\boldsymbol{y}}_\tau \;=\; \beta\,\tilde{Y}^\top \tilde{Y}\,\boldsymbol{\xi}.$$
+
+<p>So $E_{\mathrm{cave}}(\boldsymbol{\xi}) = -\frac{\beta}{2}\sum_\tau (\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)^2$ and the energy is</p>
+
+<div class="eq-box">
+$$E_t^{\mathrm{linear}}(\boldsymbol{\xi}) \;=\; \frac{1}{2}\|\boldsymbol{\xi}\|^2 - \frac{\beta}{2}\sum_\tau (\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)^2 \;=\; \frac{1}{2}\,\boldsymbol{\xi}^\top\!(I - \beta\,\tilde{Y}^\top \tilde{Y})\,\boldsymbol{\xi}.$$
+</div>
+
+<p>This is a <b>pure quadratic form</b> — not a mixture. The energy has no basins and no basin selection: the CCCP landing $\beta\,\tilde{Y}^\top \tilde{Y}\,\boldsymbol{x}_t$ is a fixed linear transformation of the query. When $\beta\,\tilde{Y}^\top \tilde{Y}$ has eigenvalues exceeding 1, the energy becomes a saddle (unbounded below) — reflecting the instability of unnormalized linear attention.</p>
+
+<p><b>Note on concavity:</b> $E_{\mathrm{cave}}(\boldsymbol{\xi}) = -\frac{\beta}{2}\boldsymbol{\xi}^\top \tilde{Y}^\top \tilde{Y}\,\boldsymbol{\xi}$ has Hessian $-\beta\,\tilde{Y}^\top\tilde{Y} \preceq 0$ (negative semidefinite), so it <b>is</b> concave. The CCCP decomposition and the hop construction from §3 are both valid — the bowl still has Hessian $I$, so the hop along the surface normal with height rise 1 gives the correct CCCP landing. The only difference is that the full energy may be a saddle, so repeated hops can diverge — but each individual hop is well-defined and still decreases the energy.</p>
+
+<div class="remark">
+<b>The three-way parallel.</b> Each variant defines $E = \frac{1}{2}\|\boldsymbol{\xi}\|^2 + E_{\mathrm{cave}}(\boldsymbol{\xi})$, where $E_{\mathrm{cave}}$ is always concave and determines the density.<br>
+Softmax: $E = -\beta^{-1}\log\sum \pi_\tau\, e^{-\frac{\beta}{2}\|\cdot\|^2}$ → <b>$n$ modes</b> (GMM).<br>
+Tanh: $E = -\beta^{-1}\log\sum \pi_\varepsilon\, e^{-\frac{\beta}{2}\|\cdot\|^2} + \mathrm{const}$ → <b>$2^n$ modes</b> (GMM, identical structure).<br>
+Linear: $E = \frac{1}{2}\boldsymbol{\xi}^\top(I - \beta\,\tilde{Y}^\top\tilde{Y})\boldsymbol{\xi}$ → <b>quadratic form</b> (possibly saddle), no selection.<br>
+In all three cases, $E_{\mathrm{cave}}$ is concave, the CCCP is valid, and the hop construction holds.
+</div>
+
+<h3>4.3 Summary table</h3>
+
+<table>
+<tr><th>Property</th><th>Softmax</th><th>Tanh</th><th>Linear (no softmax)</th></tr>
+<tr><td>Per-token factor</td><td>$\exp(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)$</td><td>$\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)$</td><td>$\beta(\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)^2$</td></tr>
+<tr><td>$E_{\mathrm{cave}}(\boldsymbol{\xi})$</td><td>$-\beta^{-1}\mathrm{lse}$</td><td>$-\beta^{-1}\sum_\tau \log\cosh(\beta\,\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)$</td><td>$-\frac{\beta}{2}\sum_\tau (\boldsymbol{\xi}^\top \tilde{\boldsymbol{y}}_\tau)^2$</td></tr>
+<tr><td>CCCP landing</td><td>$\boldsymbol{a}\,\tilde{Y}$</td><td>$\tilde{Y}^\top\tanh(\beta\,\tilde{Y}\,\boldsymbol{x}_t)$</td><td>$\beta\,\tilde{Y}^\top \tilde{Y}\,\boldsymbol{x}_t$</td></tr>
+<tr><td>Energy form</td><td>$-\beta^{-1}\log\sum \pi_\tau e^{-\frac{\beta}{2}\|\cdot\|^2}$</td><td>$-\beta^{-1}\log\sum \pi_\varepsilon e^{-\frac{\beta}{2}\|\cdot\|^2} + c$</td><td>$\frac{1}{2}\boldsymbol{\xi}^\top(I - \beta\,\tilde{Y}^\top\tilde{Y})\boldsymbol{\xi}$</td></tr>
+<tr><td>Landscape</td><td>GMM, $n$ modes</td><td>GMM, $2^n$ modes</td><td>Quadratic (possibly saddle)</td></tr>
+</table>
+
+</div>
+</section>
+
+<!-- =================== SECTION 3: DEMO =================== -->
+<section id="demo" class="demo-section">
+<div class="demo-wrap">
+
+<div class="demo-header">
+<h2>§5. Interactive Verification</h2>
+<p style="color:var(--muted);max-width:700px;margin:8px auto;font-size:15px">
+Verify the geometric interpretation in $d = 2$ with two learnable matrices. Generate tokens autoregressively and watch the landscape grow.
+</p>
+</div>
+
+<!-- Chain diagram -->
+<div class="chain">
+  <div class="step">
+    <span class="label">① Transform to modes:</span>
+    <span>$[\boldsymbol{x}_0, \ldots, \boldsymbol{x}_t]$</span>
+    <span class="pill orange">$\times\; W_K W_Q^\top$</span>
+    <span>$\longrightarrow$</span>
+    <span style="color:darkorange">$[\tilde{\boldsymbol{y}}_0, \ldots, \tilde{\boldsymbol{y}}_t]$</span>
+  </div>
+  <div class="step">
+    <span class="label">② Build GMM energy:</span>
+    <span style="font-size:13px">
+      <b>Softmax</b> ($n$ modes):&ensp;$E = -\beta^{-1}\log\sum_\tau \pi_\tau\, e^{-\frac{\beta}{2}\|\boldsymbol{\xi} - \tilde{\boldsymbol{y}}_\tau\|^2}$
+    </span>
+  </div>
+  <div class="step">
+    <span class="label" style="visibility:hidden">② </span>
+    <span style="font-size:13px">
+      <b>Tanh</b> ($2^n$ modes):&ensp;$E = -\beta^{-1}\log\sum_\varepsilon \pi_\varepsilon\, e^{-\frac{\beta}{2}\|\boldsymbol{\xi} - \boldsymbol{z}_\varepsilon\|^2} + \mathrm{const}$,&ensp;
+      $\boldsymbol{z}_\varepsilon = \sum_\tau \varepsilon_\tau \tilde{\boldsymbol{y}}_\tau$
+    </span>
+  </div>
+  <div class="step">
+    <span class="label">③ Hop & drop on $E$:</span>
+    <span>At <span style="color:var(--accent)">$\boldsymbol{x}_t$</span>, hop along surface normal (Δh = 1), drop vertically →</span>
+    <span style="color:red">$\tilde{\boldsymbol{x}}_{t+1}$</span>
+  </div>
+  <div class="step">
+    <span class="label">④ Readout:</span>
+    <span style="color:red">$\tilde{\boldsymbol{x}}_{t+1}$</span>
+    <span class="pill green">$\times\; (W_K W_Q^\top)^{-1} W_V$</span>
+    <span>$\longrightarrow$</span>
+    <span style="color:green;font-weight:700">$\boldsymbol{o}_t = \boldsymbol{x}_{t+1}$</span>
+  </div>
+</div>
+
+<!-- Demo app -->
+<div class="demo-container">
+  <div class="demo-panel">
+    <h4>Weight matrices</h4>
+    <select id="preset" onchange="applyPreset()">
+      <option value="random">Random W_Q, W_K, W_V</option>
+      <option value="rotation" selected>Rotation (70° / step)</option>
+    </select>
+    <div class="info-box" id="preset_info"></div>
+
+    <h4>Energy variant</h4>
+    <select id="variant" onchange="renderCurrentStep()">
+      <option value="softmax" selected>Softmax (1 basin / token)</option>
+      <option value="tanh">Tanh (2^n total basins)</option>
+      <option value="linear">Linear (no basins)</option>
+    </select>
+    <div class="slider-row">
+      <label>β</label>
+      <input type="range" id="beta_slider" min="-1" max="2.5" step="0.05" value="0.0" oninput="renderCurrentStep()">
+      <span class="val" id="beta_val">1.0</span>
+    </div>
+
+    <h4>2D heatmap</h4>
+    <select id="heatmap_type" onchange="renderCurrentStep()">
+      <option value="none" selected>None</option>
+      <option value="energy">Energy E(ξ)</option>
+      <option value="density">Density exp(−E)</option>
+    </select>
+
+    <div class="step-indicator" id="step_info"></div>
+    <div style="display:flex;gap:3px">
+      <button class="btn btn-step" id="btn_step" onclick="generateNext()" style="flex:1">Generate x₁ →</button>
+      <button class="btn btn-back" id="btn_back" onclick="stepBack()" style="flex:1" disabled>← Back</button>
+    </div>
+    <div style="display:flex;gap:3px">
+      <button class="btn btn-restore" id="btn_restore" onclick="restoreValues()" style="flex:1" disabled>Reset vals</button>
+      <button class="btn btn-reset" onclick="resetAll()" style="flex:1">Reset all</button>
+    </div>
+    <button class="btn btn-scale" id="btn_scale" onclick="toggleEqualScale()">🔍 True-scale (verify ⊥)</button>
+
+    <h4>Tokens</h4>
+    <div id="token_cards" style="max-height:240px;overflow-y:auto"></div>
+    <div class="info-box" style="margin-top:6px"><b>Legend:</b> click to show/hide, double-click to isolate.</div>
+    <div class="info-box" id="numinfo"></div>
+  </div>
+
+  <div class="plot-area">
+    <div id="plotdiv"></div>
+    <div id="plot2d" class="plot-2d"></div>
+  </div>
+</div>
+
+</div>
+</section>
+
+<!-- =================== SECTION 4: GUIDE =================== -->
+<section id="guide">
+<div class="guide">
+
+<h3>§6. How to Use the Demo</h3>
+
+<p><b>Basic workflow:</b> Start with the rotation preset. Click "Generate x₁" — the landscape has one basin, and the hop lands there. Click again for x₂ — now two basins appear, and the query selects the closer one. Keep generating to watch the token trajectory form a circle (2D panel, right).</p>
+
+<p><b>Verify the geometric claim:</b></p>
+<ul>
+  <li>The <b>red ×</b> (geometric: project the hop onto the surface) and the <b>gold ○</b> (algebraic: $x_t - \nabla E$) should exactly overlap — confirming the hop construction equals the CCCP update.</li>
+  <li>The <b>green ◇</b> (geometric readout) and <b>cyan ○</b> (algebraic readout) should exactly overlap in the 2D panel — confirming the full output chain.</li>
+  <li>Click <b>"🔍 True-scale"</b> to equalize all axis scales. The red hop line will visually appear perpendicular to the surface, confirming it is indeed the surface normal.</li>
+</ul>
+
+<p><b>Compare the three kernels:</b></p>
+<ul>
+  <li><b>Softmax:</b> one basin per token. The hop selects among basins based on proximity to the query.</li>
+  <li><b>Tanh:</b> four basins per token (in $d = 2$). The landscape is overpopulated with spurious modes.</li>
+  <li><b>Linear:</b> a pure quadratic form (possibly saddle). No basin selection — the output is a fixed linear map $\beta\,\tilde{Y}^\top \tilde{Y}\,\boldsymbol{x}_t$ of the query.</li>
+</ul>
+
+<p><b>Explore the parameters:</b></p>
+<ul>
+  <li><b>β slider:</b> controls basin sharpness. High β → sharp, well-separated basins. Low β → blurred, merged landscape. Try β from 0.1 to 100.</li>
+  <li><b>Token sliders:</b> drag any token's position to see how the landscape reshapes in real time.</li>
+  <li><b>2D heatmap:</b> overlay the energy or the Boltzmann density $\propto e^{-E}$ on the trajectory panel to see the basin structure in 2D.</li>
+</ul>
+
+</div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer>
+  <p>Zhixin Lu · <a href="#">Synchronize or Hop: Two Mechanisms for Predicting the Dynamical World</a> · 2026</p>
+  <p style="margin-top:4px;font-size:11px;color:#a8a29e">Built with Plotly.js and MathJax. Code and samples: <a href="#">github.com/zhixinlu</a></p>
+</footer>
+
+<!-- =================== SCRIPT =================== -->
+<script>
+// === Matrix helpers ===
+function mat2x2_mul(A,B){return[[A[0][0]*B[0][0]+A[0][1]*B[1][0],A[0][0]*B[0][1]+A[0][1]*B[1][1]],[A[1][0]*B[0][0]+A[1][1]*B[1][0],A[1][0]*B[0][1]+A[1][1]*B[1][1]]];}
+function mat2x2_T(A){return[[A[0][0],A[1][0]],[A[0][1],A[1][1]]];}
+function mat2x2_inv(A){const d=A[0][0]*A[1][1]-A[0][1]*A[1][0];return[[A[1][1]/d,-A[0][1]/d],[-A[1][0]/d,A[0][0]/d]];}
+function vm(v,A){return[v[0]*A[0][0]+v[1]*A[1][0],v[0]*A[0][1]+v[1]*A[1][1]];}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1];}
+function norm(a){return Math.sqrt(dot(a,a));}
+function vsub(a,b){return[a[0]-b[0],a[1]-b[1]];}
+function R(deg){const r=deg*Math.PI/180;return[[Math.cos(r),-Math.sin(r)],[Math.sin(r),Math.cos(r)]];}
+
+// === Presets ===
+const PRESETS = {
+  random: {
+    W_K:[[1.0288568739519013,1.6419200406711503],[1.1467195295966137,-0.9731795154745656]],
+    W_Q:[[-1.3928000963768683,0.06719635507109722],[0.8613509179404263,0.509186798845688]],
+    W_V:[[1.8102855742952833,0.7508434731539183],[0.6397595539314624,-0.7313225212292476]],
+    tokens0:[[1.0,0.5],[-0.3,1.2]],
+    desc:'Random matrices. Starts with x₀, x₁.',
+  },
+  rotation: {
+    W_K:[[1,0],[0,1]], W_Q:R(15), W_V:R(-70),
+    tokens0:[[1.0,0.0]],
+    desc:'M=R(15°), W_V=R(−70°). 70° rotation per step. Set β≈10.',
+    defaultLogBeta:1.0,
+  },
+};
+
+let M, M_T, M_T_inv, readout_mat, W_V_mat;
+let tokens=[[1.0,0.0]], numInitial=1, currentCamera=null;
+let generatedOriginals=[], equalScale=false, savedCamera=null;
+
+function applyPreset(){
+  const name=document.getElementById('preset').value, p=PRESETS[name];
+  M=mat2x2_mul(p.W_Q,mat2x2_T(p.W_K)); M_T=mat2x2_T(M);
+  M_T_inv=mat2x2_inv(M_T); readout_mat=mat2x2_mul(M_T_inv,p.W_V);
+  W_V_mat=p.W_V;  // store W_V separately for standard attention computation
+  tokens=p.tokens0.map(t=>[...t]); numInitial=p.tokens0.length;
+  generatedOriginals=[]; equalScale=false;
+  document.getElementById('btn_scale').classList.remove('active');
+  document.getElementById('btn_scale').textContent='🔍 True-scale (verify ⊥)';
+  if(p.defaultLogBeta!==undefined) document.getElementById('beta_slider').value=p.defaultLogBeta;
+  document.getElementById('preset_info').innerHTML=`<b>${name}:</b> ${p.desc}`;
+  buildTokenCards(); renderCurrentStep();
+}
+function transform(x){return vm(x,M_T);}
+
+// === Energy functions ===
+function logSumExp(arr){const mx=Math.max(...arr);let s=0;for(const a of arr)s+=Math.exp(a-mx);return Math.log(s)+mx;}
+function log_cosh(u){const a=Math.abs(u);return a>20?a-Math.LN2:Math.log(Math.cosh(u));}
+
+function E_softmax(xi,Y,beta){return-logSumExp(Y.map(y=>beta*dot(xi,y)))/beta+.5*dot(xi,xi);}
+function gE_softmax(xi,Y,beta){const sc=Y.map(y=>beta*dot(xi,y));const mx=Math.max(...sc);let ws=sc.map(s=>Math.exp(s-mx));const Z=ws.reduce((a,b)=>a+b);ws=ws.map(w=>w/Z);let g=[xi[0],xi[1]];for(let t=0;t<Y.length;t++){g[0]-=ws[t]*Y[t][0];g[1]-=ws[t]*Y[t][1];}return g;}
+
+function E_tanh(xi,Y,beta){let s=0;for(const y of Y)s+=log_cosh(beta*dot(xi,y));return-s/beta+.5*dot(xi,xi);}
+function gE_tanh(xi,Y,beta){let g=[xi[0],xi[1]];for(const y of Y){const t=Math.tanh(beta*dot(xi,y));g[0]-=t*y[0];g[1]-=t*y[1];}return g;}
+
+function E_linear(xi,Y,beta){let s=0;for(const y of Y){const d=dot(xi,y);s+=d*d;}return.5*dot(xi,xi)-.5*beta*s;}
+function gE_linear(xi,Y,beta){let g=[xi[0],xi[1]];for(const y of Y){const d=beta*dot(xi,y);g[0]-=d*y[0];g[1]-=d*y[1];}return g;}
+
+const EFN={softmax:{E:E_softmax,gE:gE_softmax},tanh:{E:E_tanh,gE:gE_tanh},linear:{E:E_linear,gE:gE_linear}};
+
+// === UI ===
+function buildTokenCards(){
+  const container=document.getElementById('token_cards');
+  container.innerHTML='';
+  for(let i=0;i<tokens.length;i++){
+    const isInitial=i<numInitial, isQuery=i===tokens.length-1;
+    const card=document.createElement('div');
+    card.className='token-card'+(isQuery?' active':'')+(!isInitial?' generated':'');
+    let badges='';
+    if(isInitial)badges+='<span class="badge badge-initial">initial</span> ';
+    else badges+='<span class="badge badge-generated">gen</span> ';
+    if(isQuery)badges+='<span class="badge badge-query">query</span>';
+    const y=transform(tokens[i]);
+    card.innerHTML=`<div class="title">x<sub>${i}</sub> ${badges}</div>
+      <div class="slider-row"><label>[1]</label><input type="range" min="-4" max="4" step="0.05" value="${tokens[i][0]}" oninput="updateToken(${i},0,this.value)"><span class="val" id="tv${i}0">${tokens[i][0].toFixed(2)}</span></div>
+      <div class="slider-row"><label>[2]</label><input type="range" min="-4" max="4" step="0.05" value="${tokens[i][1]}" oninput="updateToken(${i},1,this.value)"><span class="val" id="tv${i}1">${tokens[i][1].toFixed(2)}</span></div>
+      <div style="font-size:9px;color:var(--muted);margin-top:2px">ỹ<sub>${i}</sub>=[${y[0].toFixed(2)},${y[1].toFixed(2)}]</div>`;
+    container.appendChild(card);
+  }
+  const btn=document.getElementById('btn_step'), nextIdx=tokens.length;
+  const subs=['₁','₂','₃','₄','₅','₆','₇','₈','₉'];
+  if(nextIdx>9){btn.disabled=true;btn.textContent='Max 10 tokens';}
+  else{btn.disabled=false;const si=nextIdx-1;btn.textContent=si<subs.length?`Generate x${subs[si]} →`:'Max';}
+  const btnB=document.getElementById('btn_back');
+  btnB.disabled=(tokens.length<=numInitial);
+  if(!btnB.disabled){const ss=['₀','₁','₂','₃','₄','₅','₆','₇','₈','₉'];btnB.textContent=`← x${tokens.length-1<ss.length?ss[tokens.length-1]:tokens.length-1}`;}
+  else btnB.textContent='← Back';
+  document.getElementById('btn_restore').disabled=(generatedOriginals.length===0);
+  document.getElementById('step_info').textContent=`Step ${tokens.length-numInitial}: ${tokens.length} token${tokens.length>1?'s':''}`;
+}
+function updateToken(i,d,v){tokens[i][d]=parseFloat(v);document.getElementById(`tv${i}${d}`).textContent=parseFloat(v).toFixed(2);renderCurrentStep();}
+function generateNext(){
+  if(tokens.length>=10)return;
+  const variant=document.getElementById('variant').value;
+  const beta=Math.pow(10,parseFloat(document.getElementById('beta_slider').value));
+  const{E,gE}=EFN[variant];
+  const query=tokens[tokens.length-1],Y=tokens.map(t=>transform(t));
+  const g=gE(query,Y,beta),landing=[query[0]-g[0],query[1]-g[1]];
+  const output=vm(landing,readout_mat),nt=[output[0],output[1]];
+  tokens.push(nt);generatedOriginals.push([...nt]);
+  buildTokenCards();renderCurrentStep();
+}
+function stepBack(){if(tokens.length<=numInitial)return;tokens.pop();generatedOriginals.pop();buildTokenCards();renderCurrentStep();}
+function restoreValues(){for(let i=0;i<generatedOriginals.length;i++)tokens[numInitial+i]=[...generatedOriginals[i]];buildTokenCards();renderCurrentStep();}
+function resetAll(){applyPreset();}
+function toggleEqualScale(){
+  equalScale=!equalScale;const btn=document.getElementById('btn_scale');
+  if(equalScale){savedCamera=currentCamera;btn.textContent='🔍 Back to normal';btn.classList.add('active');}
+  else{currentCamera=savedCamera;btn.textContent='🔍 True-scale (verify ⊥)';btn.classList.remove('active');}
+  renderCurrentStep();
+}
+
+// === Main render ===
+function renderCurrentStep(){
+  const variant=document.getElementById('variant').value;
+  const beta=Math.pow(10,parseFloat(document.getElementById('beta_slider').value));
+  document.getElementById('beta_val').textContent=beta.toFixed(2);
+  const{E,gE}=EFN[variant];
+  const query=tokens[tokens.length-1],Y=tokens.map(t=>transform(t));
+  const g=gE(query,Y,beta),xt_next=[query[0]-g[0],query[1]-g[1]];
+  const h0=E(query,Y,beta),ng=norm(g),L=Math.sqrt(1+ng*ng);
+  const nhat=[-g[0]/L,-g[1]/L,1/L];
+  const top=[query[0]+L*nhat[0],query[1]+L*nhat[1],h0+L*nhat[2]];
+  const proj=[top[0],top[1]],hLand=E(proj,Y,beta);
+  const o_geom=vm(proj,readout_mat);  // geometric: hop → project → readout
+  
+  // o_alg: compute from the STANDARD ATTENTION FORMULA, independently of the energy
+  // For softmax: o = softmax(β x_t Ỹ^T) · X · W_V  (the QKV formula everyone knows)
+  // For tanh/linear: compute variant-specific CCCP landing, then readout
+  let o_alg;
+  if (variant==='softmax') {
+    // Standard softmax attention: a @ X @ W_V — NO energy, NO readout_mat
+    const sc=Y.map(y=>beta*dot(query,y));
+    const mx=Math.max(...sc);
+    let ws=sc.map(s=>Math.exp(s-mx));
+    const Z=ws.reduce((a,b)=>a+b);
+    ws=ws.map(w=>w/Z);  // softmax weights a
+    // Compute a @ X @ W_V = sum_tau a_tau * (x_tau @ W_V)
+    let aXWv=[0,0];
+    for(let t=0;t<tokens.length;t++){
+      const xWv=vm(tokens[t],W_V_mat);  // x_tau @ W_V
+      aXWv[0]+=ws[t]*xWv[0];
+      aXWv[1]+=ws[t]*xWv[1];
+    }
+    o_alg=aXWv;
+  } else {
+    // For tanh/linear: compute CCCP landing algebraically, then apply readout
+    o_alg=vm(xt_next,readout_mat);
+  }
+
+  // Grid
+  const allPts=[...Y,query,xt_next];
+  let cx=0,cy=0;for(const p of allPts){cx+=p[0];cy+=p[1];}cx/=allPts.length;cy/=allPts.length;
+  let span=3;for(const p of allPts)span=Math.max(span,1.8*Math.max(Math.abs(p[0]-cx),Math.abs(p[1]-cy)));
+  const N=55,gx=[],gy=[];
+  for(let i=0;i<N;i++){gx.push(cx-span+2*span*i/(N-1));gy.push(cy-span+2*span*i/(N-1));}
+  const Z=[];
+  for(let j=0;j<N;j++){const row=[];for(let i=0;i<N;i++)row.push(E([gx[i],gy[j]],Y,beta));Z.push(row);}
+
+  const traces=[];
+  traces.push({type:'surface',x:gx,y:gy,z:Z,colorscale:'Viridis',opacity:0.8,showscale:false,name:'E(ξ)',legendgroup:'surface',showlegend:true,hovertemplate:'(%{x:.2f},%{y:.2f})<br>E=%{z:.3f}<extra></extra>'});
+
+  // Modes
+  let modes,mcol,mLabels;
+  if(variant==='tanh'){
+    // 2^n modes: z_eps = sum_tau eps_tau * y_tau
+    const nTok=Y.length;const nModes=Math.pow(2,nTok);
+    modes=[];mLabels=[];
+    if(nModes<=64){  // show modes if not too many
+      for(let k=0;k<nModes;k++){let z=[0,0];for(let tau=0;tau<nTok;tau++){const eps=((k>>tau)&1)?-1:1;z[0]+=eps*Y[tau][0];z[1]+=eps*Y[tau][1];}modes.push(z);mLabels.push('');}
+    }
+    mcol='orchid';
+  } else{modes=[...Y];mcol='orange';mLabels=Y.map((_,t)=>`ỹ${String.fromCharCode(8320+t)}`);}
+  if(modes.length>0){const mz=modes.map(m=>E(m,Y,beta));
+  traces.push({type:'scatter3d',x:modes.map(m=>m[0]),y:modes.map(m=>m[1]),z:mz,mode:'markers'+(mLabels.some(l=>l)?'+text':''),marker:{size:6,color:mcol,symbol:'diamond',line:{color:'black',width:1}},text:mLabels,textposition:'top center',textfont:{size:15,color:mcol},name:`modes (${variant==='tanh'?'2^'+Y.length+'='+modes.length:modes.length})`,legendgroup:'modes',showlegend:true});}
+  // Always show ỹ_τ markers
+  if(variant==='tanh'){const pz=Y.map(y=>E(y,Y,beta));traces.push({type:'scatter3d',x:Y.map(y=>y[0]),y:Y.map(y=>y[1]),z:pz,mode:'markers+text',marker:{size:8,color:'orange',symbol:'diamond',line:{color:'black',width:2}},text:Y.map((_,t)=>`ỹ${String.fromCharCode(8320+t)}`),textposition:'top center',textfont:{size:15,color:'darkorange'},name:'ỹ_τ (tokens)',legendgroup:'modes',showlegend:false});}
+
+  traces.push({type:'scatter3d',x:[query[0]],y:[query[1]],z:[h0],mode:'markers+text',marker:{size:9,color:'#0f766e',symbol:'circle',line:{color:'black',width:2}},text:[`x${String.fromCharCode(8320+tokens.length-1)}`],textposition:'top center',textfont:{size:15,color:'#0f766e'},name:'query',legendgroup:'query',showlegend:true});
+
+  traces.push({type:'scatter3d',x:[query[0],top[0]],y:[query[1],top[1]],z:[h0,top[2]],mode:'lines+markers',line:{color:'red',width:6},marker:{size:[5,7],color:'red'},name:`hop (Δh=${(top[2]-h0).toFixed(4)})`,legendgroup:'hop',showlegend:true});
+
+  const hRef=h0+1;
+  traces.push({type:'scatter3d',x:[query[0],top[0]],y:[query[1],top[1]],z:[hRef,hRef],mode:'lines',line:{color:'dodgerblue',width:3,dash:'dash'},name:'Δh=1 ref',legendgroup:'dh1',showlegend:true});
+  traces.push({type:'scatter3d',x:[query[0],query[0]],y:[query[1],query[1]],z:[h0,hRef],mode:'lines',line:{color:'dodgerblue',width:2,dash:'dot'},legendgroup:'dh1',showlegend:false});
+  traces.push({type:'scatter3d',x:[(query[0]+top[0])/2],y:[(query[1]+top[1])/2],z:[hRef+.15],mode:'text',text:['Δh=1'],textfont:{size:13,color:'dodgerblue'},legendgroup:'dh1',showlegend:false});
+
+  traces.push({type:'scatter3d',x:[top[0],proj[0]],y:[top[1],proj[1]],z:[top[2],hLand],mode:'lines',line:{color:'red',width:4,dash:'dash'},name:`drop (${(top[2]-hLand).toFixed(1)})`,legendgroup:'drop',showlegend:true});
+
+  traces.push({type:'scatter3d',x:[proj[0]],y:[proj[1]],z:[hLand],mode:'markers+text',marker:{size:12,color:'red',symbol:'x',line:{color:'black',width:2}},text:['geom'],textposition:'top right',textfont:{size:11,color:'red'},name:'geometric',legendgroup:'geom',showlegend:true});
+
+  const hAlg=E(xt_next,Y,beta);
+  traces.push({type:'scatter3d',x:[xt_next[0]],y:[xt_next[1]],z:[hAlg],mode:'markers+text',marker:{size:10,color:'gold',symbol:'circle',line:{color:'black',width:2}},text:['alg'],textposition:'bottom left',textfont:{size:11,color:'goldenrod'},name:`algebraic (||Δ||=${norm(vsub(proj,xt_next)).toExponential(1)})`,legendgroup:'alg',showlegend:true});
+
+  // Scene
+  let sceneConfig;
+  if(equalScale){
+    const hp=[[query[0],query[1],h0],[top[0],top[1],top[2]],[proj[0],proj[1],hLand]];
+    let sx0=1e9,sx1=-1e9,sy0=1e9,sy1=-1e9,sz0=1e9,sz1=-1e9;
+    for(const p of hp){if(p[0]<sx0)sx0=p[0];if(p[0]>sx1)sx1=p[0];if(p[1]<sy0)sy0=p[1];if(p[1]>sy1)sy1=p[1];if(p[2]<sz0)sz0=p[2];if(p[2]>sz1)sz1=p[2];}
+    const ms=Math.max(sx1-sx0,sy1-sy0,sz1-sz0,0.5)*0.7+0.3;
+    const ccx=(sx0+sx1)/2,ccy=(sy0+sy1)/2,ccz=(sz0+sz1)/2;
+    sceneConfig={xaxis:{title:'ξ₁',range:[ccx-ms,ccx+ms]},yaxis:{title:'ξ₂',range:[ccy-ms,ccy+ms]},zaxis:{title:'E',range:[ccz-ms,ccz+ms]},aspectmode:'cube',aspectratio:{x:1,y:1,z:1},camera:{eye:{x:1.4,y:-1.4,z:0.8}}};
+  } else {
+    sceneConfig={xaxis:{title:'ξ₁'},yaxis:{title:'ξ₂'},zaxis:{title:'E(ξ)'},aspectmode:'cube',camera:currentCamera||{eye:{x:1.6,y:-1.6,z:1.0}}};
+  }
+
+  const eqns={softmax:'E = −β⁻¹ log Σ π_τ exp(−β/2 ‖ξ−ỹ_τ‖²)   [n modes]',tanh:'E = −β⁻¹ log Σ π_ε exp(−β/2 ‖ξ−z_ε‖²) + c   [2ⁿ modes]',linear:'E = ½ξᵀ(I − β Ỹᵀ Ỹ)ξ   [quadratic]'};
+  const tits={softmax:'Softmax',tanh:'Tanh',linear:'Linear'};
+  Plotly.react('plotdiv',traces,{
+    title:{text:`${tits[variant]} | β=${beta.toFixed(1)} | ${eqns[variant]}${equalScale?' | ⚖️ TRUE SCALE':''}`,font:{size:12}},
+    scene:sceneConfig,
+    legend:{x:.01,y:.99,bgcolor:'rgba(255,255,255,0.85)',font:{size:9},itemclick:'toggle',itemdoubleclick:'toggleothers',title:{text:'show/hide:',font:{size:8,color:'#999'}}},
+    margin:{l:0,r:0,t:35,b:0},
+  }).then(()=>{document.getElementById('plotdiv').on('plotly_relayout',ed=>{if(ed['scene.camera']&&!equalScale)currentCamera=ed['scene.camera'];});});
+
+  // === 2D panel ===
+  const t2d=[];
+  const all2d=[...tokens,...Y,xt_next,o_geom,o_alg];
+  let xmin=1e9,xmax=-1e9,ymin=1e9,ymax=-1e9;
+  for(const p of all2d){if(p[0]<xmin)xmin=p[0];if(p[0]>xmax)xmax=p[0];if(p[1]<ymin)ymin=p[1];if(p[1]>ymax)ymax=p[1];}
+  const ds=Math.max(xmax-xmin,ymax-ymin,2)*.65+.5;
+  const cx2=(xmin+xmax)/2,cy2=(ymin+ymax)/2;
+  const hxn=cx2-ds,hxx=cx2+ds,hyn=cy2-ds,hyx=cy2+ds;
+
+  const hmType=document.getElementById('heatmap_type').value;
+  if(hmType!=='none'){
+    const hmN=80,hmP=ds*.3,hmx=[],hmy=[];
+    for(let i=0;i<hmN;i++){hmx.push(hxn-hmP+(hxx-hxn+2*hmP)*i/(hmN-1));hmy.push(hyn-hmP+(hyx-hyn+2*hmP)*i/(hmN-1));}
+    const hmZ=[];for(let j=0;j<hmN;j++){const row=[];for(let i=0;i<hmN;i++){const ev=E([hmx[i],hmy[j]],Y,beta);row.push(hmType==='energy'?ev:Math.exp(-ev));}hmZ.push(row);}
+    t2d.push({type:'contour',x:hmx,y:hmy,z:hmZ,colorscale:hmType==='energy'?'Viridis':'Hot',reversescale:hmType==='density',contours:{coloring:'heatmap'},opacity:0.4,showscale:false,name:hmType==='energy'?'E(ξ)':'exp(−E)',hovertemplate:'(%{x:.2f},%{y:.2f})<br>'+hmType[0]+'=%{z:.3f}<extra></extra>'});
+  }
+
+  t2d.push({type:'scatter',x:tokens.map(t=>t[0]),y:tokens.map(t=>t[1]),mode:'lines+markers+text',line:{color:'#0f766e',width:2},marker:{size:10,color:'#0f766e',symbol:'circle',line:{color:'black',width:1.5}},text:tokens.map((_,i)=>`x${String.fromCharCode(8320+i)}`),textposition:'top right',textfont:{size:13,color:'#0f766e'},name:'tokens'});
+  t2d.push({type:'scatter',x:[xt_next[0]],y:[xt_next[1]],mode:'markers+text',marker:{size:12,color:'red',symbol:'x',line:{color:'black',width:2}},text:['x̃'],textposition:'bottom right',textfont:{size:11,color:'red'},name:'landing'});
+  t2d.push({type:'scatter',x:[query[0],xt_next[0]],y:[query[1],xt_next[1]],mode:'lines',line:{color:'red',width:1.5,dash:'dot'},showlegend:false});
+  t2d.push({type:'scatter',x:[o_geom[0]],y:[o_geom[1]],mode:'markers+text',marker:{size:12,color:'limegreen',symbol:'diamond',line:{color:'black',width:2}},text:['hop→readout'],textposition:'bottom right',textfont:{size:11,color:'green'},name:'o_t from geometric hop'});
+  t2d.push({type:'scatter',x:[o_alg[0]],y:[o_alg[1]],mode:'markers+text',marker:{size:9,color:'cyan',symbol:'circle',line:{color:'black',width:1.5}},text:[variant==='softmax'?'aXWᵥ':'CCCP→readout'],textposition:'top left',textfont:{size:10,color:'darkcyan'},name:`o_t from ${variant==='softmax'?'standard attn aXWᵥ':'algebraic CCCP'} (Δ=${norm(vsub(o_geom,o_alg)).toExponential(1)})`});
+  t2d.push({type:'scatter',x:[xt_next[0],o_geom[0]],y:[xt_next[1],o_geom[1]],mode:'lines',line:{color:'limegreen',width:1.5,dash:'dash'},name:'readout'});
+  if(tokens.length>numInitial){const gx2=tokens.slice(numInitial).map(t=>t[0]),gy2=tokens.slice(numInitial).map(t=>t[1]);t2d.push({type:'scatter',x:gx2,y:gy2,mode:'markers',marker:{size:8,color:'#b45309',symbol:'square',line:{color:'black',width:1}},name:'generated'});}
+  t2d.push({type:'scatter',x:Y.map(y=>y[0]),y:Y.map(y=>y[1]),mode:'markers+text',marker:{size:8,color:'orange',symbol:'diamond',line:{color:'black',width:1}},text:Y.map((_,i)=>`ỹ${String.fromCharCode(8320+i)}`),textposition:'bottom left',textfont:{size:11,color:'darkorange'},name:'modes ỹ'});
+
+  const hmL=hmType==='energy'?' + E(ξ)':hmType==='density'?' + exp(−E)':'';
+  Plotly.react('plot2d',t2d,{title:{text:`Trajectory & readout${hmL}`,font:{size:12}},xaxis:{title:'dim 1',scaleanchor:'y',scaleratio:1,range:[hxn,hxx]},yaxis:{title:'dim 2',range:[hyn,hyx]},legend:{x:.01,y:.99,bgcolor:'rgba(255,255,255,0.85)',font:{size:9},itemclick:'toggle',itemdoubleclick:'toggleothers'},margin:{l:45,r:10,t:35,b:35},showlegend:true});
+
+  document.getElementById('numinfo').innerHTML=`<b>Step ${tokens.length-numInitial}:</b> β=${beta.toFixed(2)}<br><b>3D landscape:</b><br>Δh=${(top[2]-h0).toFixed(6)}<br>Drop=${(top[2]-hLand).toFixed(2)}<br>||geom−alg landing||=${norm(vsub(proj,xt_next)).toExponential(1)}<br><b>2D output (key test):</b><br>o_geom (hop→readout)=[${o_geom[0].toFixed(3)},${o_geom[1].toFixed(3)}]<br>o_alg (${variant==='softmax'?'aXW_V':'CCCP→readout'})=[${o_alg[0].toFixed(3)},${o_alg[1].toFixed(3)}]<br>||o_geom−o_alg||=${norm(vsub(o_geom,o_alg)).toExponential(1)}`;
+}
+
+applyPreset();
+</script>
 </body>
 </html>
