@@ -18,6 +18,8 @@ MathJax = {
   --muted: #a7b0c6; --border: #303b56; --card: #1e2433; --code: #1a1f2c;
   --teal-light: rgba(52,209,192,0.10); --orange-light: rgba(229,168,59,0.10);
 }
+/* When embedded in another page, hide the hero title (the host page shows it). */
+html.embedded .hero { display: none; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
        background: var(--bg); color: var(--fg); line-height: 1.7; }
@@ -130,6 +132,7 @@ footer a { color: var(--accent); }
 </style>
 </head>
 <body>
+<script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
 
 <!-- =================== HERO =================== -->
 <div class="hero">
