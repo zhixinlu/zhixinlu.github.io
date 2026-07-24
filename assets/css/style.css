@@ -1,18 +1,18 @@
 /* ============================================================
    Zhixin Lu — personal academic website
-   Palette inspired by the "AI for Dynamics" gold ring logo
+   Palette inspired by the golden Möbius-strip "AI for Dynamics" logo
    ============================================================ */
 :root {
-  --bg:        #0b0e14;
-  --bg-soft:   #12161f;
-  --card:      #161b26;
-  --border:    #26304a;
-  --fg:        #e8eaf0;
-  --muted:     #9aa4bd;
+  --bg:        #121622;
+  --bg-soft:   #1a1f2c;
+  --card:      #1e2433;
+  --border:    #303b56;
+  --fg:        #eceef4;
+  --muted:     #a7b0c6;
   --gold:      #e5a83b;
   --gold-soft: #f3c76b;
   --teal:      #34d1c0;
-  --link:      #7fd7ff;
+  --link:      #8bdcff;
   --maxw:      1000px;
 }
 
@@ -36,7 +36,7 @@ a:hover { text-decoration: underline; }
 /* ---------- Navbar ---------- */
 .nav {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(11, 14, 20, 0.85);
+  background: rgba(18, 22, 34, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -64,9 +64,9 @@ a:hover { text-decoration: underline; }
 /* ---------- Hero ---------- */
 .hero {
   background:
-    radial-gradient(1200px 400px at 80% -10%, rgba(229,168,59,0.18), transparent 60%),
+    radial-gradient(1200px 400px at 80% -10%, rgba(229,168,59,0.20), transparent 60%),
     radial-gradient(900px 500px at 10% 10%, rgba(52,209,192,0.10), transparent 60%),
-    linear-gradient(180deg, #0d1017 0%, var(--bg) 100%);
+    linear-gradient(180deg, #161b2b 0%, var(--bg) 100%);
   border-bottom: 1px solid var(--border);
   padding: 64px 0 56px;
 }
@@ -80,9 +80,11 @@ a:hover { text-decoration: underline; }
 .hero p.lede { margin-top: 18px; color: var(--fg); font-size: 16px; max-width: 620px; }
 .hero .logo-wrap { text-align: center; }
 .hero .logo-wrap img {
-  width: 100%; max-width: 300px; height: auto;
-  border-radius: 16px;
-  filter: drop-shadow(0 0 55px rgba(229,168,59,0.35));
+  width: 100%; max-width: 320px; height: auto;
+  /* The PNG has a pure-black background; "screen" drops the black so only
+     the gold Möbius glow shows, blending it into the page. */
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 45px rgba(229,168,59,0.30));
 }
 .hero .cta { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; }
 .btn {

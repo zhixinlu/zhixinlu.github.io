@@ -14,9 +14,9 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 <style>
 :root {
-  --bg: #fafaf9; --fg: #1c1917; --accent: #0f766e; --accent2: #b45309;
-  --muted: #78716c; --border: #d6d3d1; --card: #fff; --code: #f5f5f4;
-  --teal-light: #f0fdfa; --orange-light: #fffbeb;
+  --bg: #121622; --fg: #eceef4; --accent: #34d1c0; --accent2: #f3c76b;
+  --muted: #a7b0c6; --border: #303b56; --card: #1e2433; --code: #1a1f2c;
+  --teal-light: rgba(52,209,192,0.10); --orange-light: rgba(229,168,59,0.10);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
@@ -772,13 +772,18 @@ function renderCurrentStep(){
   } else {
     sceneConfig={xaxis:{title:'ξ₁'},yaxis:{title:'ξ₂'},zaxis:{title:'E(ξ)'},aspectmode:'cube',camera:currentCamera||{eye:{x:1.6,y:-1.6,z:1.0}}};
   }
+  { const _axDark={backgroundcolor:'rgba(0,0,0,0)',gridcolor:'#2a3350',zerolinecolor:'#3a4560',color:'#cbd5e1',showbackground:true};
+    sceneConfig.xaxis=Object.assign({},sceneConfig.xaxis,_axDark);
+    sceneConfig.yaxis=Object.assign({},sceneConfig.yaxis,_axDark);
+    sceneConfig.zaxis=Object.assign({},sceneConfig.zaxis,_axDark); }
 
   const eqns={softmax:'E = −β⁻¹ log Σ π_τ exp(−β/2 ‖ξ−ỹ_τ‖²)   [n modes]',tanh:'E = −β⁻¹ log Σ π_ε exp(−β/2 ‖ξ−z_ε‖²) + c   [2ⁿ modes]',linear:'E = ½ξᵀ(I − β Ỹᵀ Ỹ)ξ   [quadratic]'};
   const tits={softmax:'Softmax',tanh:'Tanh',linear:'Linear'};
   Plotly.react('plotdiv',traces,{
-    title:{text:`${tits[variant]} | β=${beta.toFixed(1)} | ${eqns[variant]}${equalScale?' | ⚖️ TRUE SCALE':''}`,font:{size:12}},
+    title:{text:`${tits[variant]} | β=${beta.toFixed(1)} | ${eqns[variant]}${equalScale?' | ⚖️ TRUE SCALE':''}`,font:{size:12,color:'#cbd5e1'}},
+    paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)', font:{color:'#cbd5e1'},
     scene:sceneConfig,
-    legend:{x:.01,y:.99,bgcolor:'rgba(255,255,255,0.85)',font:{size:9},itemclick:'toggle',itemdoubleclick:'toggleothers',title:{text:'show/hide:',font:{size:8,color:'#999'}}},
+    legend:{x:.01,y:.99,bgcolor:'rgba(26,31,44,0.85)',font:{size:9,color:'#cbd5e1'},itemclick:'toggle',itemdoubleclick:'toggleothers',title:{text:'show/hide:',font:{size:8,color:'#999'}}},
     margin:{l:0,r:0,t:35,b:0},
   }).then(()=>{document.getElementById('plotdiv').on('plotly_relayout',ed=>{if(ed['scene.camera']&&!equalScale)currentCamera=ed['scene.camera'];});});
 
@@ -809,7 +814,7 @@ function renderCurrentStep(){
   t2d.push({type:'scatter',x:Y.map(y=>y[0]),y:Y.map(y=>y[1]),mode:'markers+text',marker:{size:8,color:'orange',symbol:'diamond',line:{color:'black',width:1}},text:Y.map((_,i)=>`ỹ${String.fromCharCode(8320+i)}`),textposition:'bottom left',textfont:{size:11,color:'darkorange'},name:'modes ỹ'});
 
   const hmL=hmType==='energy'?' + E(ξ)':hmType==='density'?' + exp(−E)':'';
-  Plotly.react('plot2d',t2d,{title:{text:`Trajectory & readout${hmL}`,font:{size:12}},xaxis:{title:'dim 1',scaleanchor:'y',scaleratio:1,range:[hxn,hxx]},yaxis:{title:'dim 2',range:[hyn,hyx]},legend:{x:.01,y:.99,bgcolor:'rgba(255,255,255,0.85)',font:{size:9},itemclick:'toggle',itemdoubleclick:'toggleothers'},margin:{l:45,r:10,t:35,b:35},showlegend:true});
+  Plotly.react('plot2d',t2d,{title:{text:`Trajectory & readout${hmL}`,font:{size:12,color:'#cbd5e1'}},paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{color:'#cbd5e1'},xaxis:{title:'dim 1',scaleanchor:'y',scaleratio:1,range:[hxn,hxx],gridcolor:'#2a3350',zerolinecolor:'#3a4560'},yaxis:{title:'dim 2',range:[hyn,hyx],gridcolor:'#2a3350',zerolinecolor:'#3a4560'},legend:{x:.01,y:.99,bgcolor:'rgba(26,31,44,0.85)',font:{size:9,color:'#cbd5e1'},itemclick:'toggle',itemdoubleclick:'toggleothers'},margin:{l:45,r:10,t:35,b:35},showlegend:true});
 
   document.getElementById('numinfo').innerHTML=`<b>Step ${tokens.length-numInitial}:</b> β=${beta.toFixed(2)}<br><b>3D landscape:</b><br>Δh=${(top[2]-h0).toFixed(6)}<br>Drop=${(top[2]-hLand).toFixed(2)}<br>||geom−alg landing||=${norm(vsub(proj,xt_next)).toExponential(1)}<br><b>2D output (key test):</b><br>o_geom (hop→readout)=[${o_geom[0].toFixed(3)},${o_geom[1].toFixed(3)}]<br>o_alg (${variant==='softmax'?'aXW_V':'CCCP→readout'})=[${o_alg[0].toFixed(3)},${o_alg[1].toFixed(3)}]<br>||o_geom−o_alg||=${norm(vsub(o_geom,o_alg)).toExponential(1)}`;
 }
