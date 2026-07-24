@@ -39,27 +39,22 @@
       </p>
       <p style="margin-top:10px">
         <a class="btn primary" href="essay.html" target="_blank" rel="noopener">Open essay full-screen ↗</a>
-        <a class="btn ghost" href="#demo">Jump to the interactive demo ↓</a>
+        <a class="btn ghost" href="#" onclick="jumpToDemo();return false;">Jump to the interactive demo ↓</a>
         <a class="btn ghost" href="../../assets/slides/SFI_2026_synchronize_or_hop.pdf" target="_blank" rel="noopener">Slides (PDF) ↗</a>
       </p>
     </div>
 
-    <!-- The original interactive page is embedded below -->
-    <iframe class="embed-frame" src="essay.html" title="Attention as Energy-Landscape Hopping (interactive)"></iframe>
-
-    <h2 id="demo" style="margin-top:40px">Interactive landscape demo</h2>
-    <p style="color:var(--fg)">
-      The live demo from the talk, embedded right here &mdash; pick starting points and step
-      through the update to watch the query <em>hop</em> across basins of the energy landscape
-      (rotate, zoom, and hover the 3D surface).
-    </p>
-    <iframe class="embed-frame" src="essay.html#demo" title="Interactive energy-landscape hopping demo"></iframe>
+    <!-- The whole interactive essay is embedded inline (auto-sized to full height,
+         so the outer page scrolls rather than a small inner window). -->
+    <iframe id="essayFrame" src="essay.html" title="Attention as Energy-Landscape Hopping (interactive)"
+            style="width:100%; border:1px solid var(--border); border-radius:12px; background:var(--bg); display:block;"
+            scrolling="no"></iframe>
 
     <h2 style="margin-top:40px">Slides from the talk</h2>
     <p style="color:var(--fg)">
       The slide deck covers both parts of the Santa Fe talk. This part (attention as
       landscape hopping) is kept brief in the slides &mdash; I walked through it live using the
-      interactive visualization above rather than static slides.
+      interactive demo above rather than static slides.
     </p>
     <embed src="../../assets/slides/SFI_2026_synchronize_or_hop.pdf" type="application/pdf"
            style="width:100%; height:75vh; border:1px solid var(--border); border-radius:12px; background:#fff" />
@@ -68,6 +63,46 @@
     </p>
   </div>
 </section>
+
+<script>
+  // Auto-size the embedded essay to its full content height so there is no
+  // inner scrollbar — the essay becomes part of this page.
+  (function () {
+    var frame = document.getElementById('essayFrame');
+    function resize() {
+      try {
+        var doc = frame.contentDocument || frame.contentWindow.document;
+        var h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+        frame.style.height = h + 'px';
+      } catch (e) { /* ignore */ }
+    }
+    frame.addEventListener('load', function () {
+      resize();
+      // Plotly / MathJax change the height after load; re-measure a few times.
+      [200, 600, 1200, 2500, 4000].forEach(function (t) { setTimeout(resize, t); });
+      try {
+        var win = frame.contentWindow;
+        win.addEventListener('resize', resize);
+        // Watch for later content changes (e.g. stepping through the demo).
+        new win.ResizeObserver(resize).observe(win.document.body);
+      } catch (e) { /* ignore */ }
+    });
+    window.addEventListener('resize', resize);
+  })();
+
+  // Scroll the outer page to the demo section inside the embedded essay.
+  function jumpToDemo() {
+    var frame = document.getElementById('essayFrame');
+    try {
+      var doc = frame.contentDocument || frame.contentWindow.document;
+      var demo = doc.getElementById('demo');
+      var y = frame.getBoundingClientRect().top + window.scrollY + (demo ? demo.offsetTop : 0);
+      window.scrollTo({ top: y - 20, behavior: 'smooth' });
+    } catch (e) {
+      frame.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
 
 <footer>
   <div class="container">
