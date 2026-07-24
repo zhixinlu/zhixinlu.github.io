@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Recurrent Models Predict Dynamics — Zhixin Lu</title>
+<link rel="icon" href="../../assets/img/ring.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<script>
+  MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$','$$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  .eq { background: var(--card); border: 1px solid var(--border);
+        border-radius: 8px; padding: 14px 18px; margin: 16px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+    <a class="brand" href="../../index.html"><img src="../../assets/img/ring.png" alt="logo"> Zhixin Lu</a>
+    <div class="links">
+      <a href="../../index.html">Home</a>
+      <a href="../../research.html">Research</a>
+      <a href="../../publications.html">Publications</a>
+      <a href="../../blog.html" class="active">Blog</a>
+      <a href="../../press.html">Press</a>
+      <a href="../../cv.html">CV</a>
+    </div>
+  </div>
+</nav>
+
+<section class="block">
+  <div class="container prose">
+    <p style="margin-bottom:8px"><a href="../../blog.html">&larr; Back to blog</a></p>
+    <h1 style="font-size:32px">How Recurrent Models Learn to Predict Dynamics</h1>
+    <p class="section-sub" style="margin-top:4px">
+      Delayed embedding, and holding it transversely stable via invertible generalized synchronization.
+    </p>
+
+    <div class="talk-banner">
+      <div class="venue">Part I of my Santa Fe Institute talk</div>
+      <div class="date">"Synchronize or Hop: Two Mechanisms for Predicting the Dynamical World in Modern ML Models" &mdash; May 2026</div>
+      <p style="margin-top:10px">
+        <a class="btn primary" href="../../assets/slides/SFI_2026_synchronize_or_hop.pdf" target="_blank" rel="noopener">Download slides (PDF)</a>
+        <a class="btn ghost" href="../attention-energy-landscape/">Part II: Attention as landscape hopping →</a>
+      </p>
+    </div>
+
+    <p>
+      Here is a puzzle. Train a recurrent neural network (or a reservoir computer) on a single
+      stream of measurements from a chaotic system &mdash; say one coordinate of the Lorenz
+      attractor &mdash; and then close the loop so the model feeds on its own output. Remarkably,
+      it will keep generating a trajectory that lives on the <em>right attractor</em>, reproducing
+      the system's long-term statistics and even its Lyapunov exponents, despite never being given
+      the governing equations. <strong>Why does this work?</strong> The answer braids together
+      three classical ideas from dynamical systems.
+    </p>
+
+    <h3>1. Delayed embedding: one observable is enough</h3>
+    <p>
+      Takens' theorem tells us that the geometry of a $d$-dimensional attractor can be
+      reconstructed from a <em>single</em> scalar observable $s(t)$ by stacking its time-delays,
+    </p>
+    <div class="eq">
+      $$ \boldsymbol{u}(t) = \big(s(t),\; s(t-\tau),\; s(t-2\tau),\; \ldots,\; s(t-(k-1)\tau)\big). $$
+    </div>
+    <p>
+      For $k$ large enough, the delay map is a <em>diffeomorphism</em> onto the true attractor:
+      no information is lost, only re-coordinatized. A recurrent model does something similar but
+      richer &mdash; instead of hand-picked delays, its hidden state $\boldsymbol{r}(t)$ integrates
+      the input history through its own dynamics, learning an <em>adaptive</em> embedding.
+    </p>
+
+    <h3>2. Generalized synchronization: the state becomes a function of the world</h3>
+    <p>
+      Drive a recurrent system with an input signal from a source dynamical system with state
+      $\boldsymbol{x}(t)$:
+    </p>
+    <div class="eq">
+      $$ \boldsymbol{r}(t+1) = F\big(\boldsymbol{r}(t),\, s(\boldsymbol{x}(t))\big). $$
+    </div>
+    <p>
+      When the driven system settles, its state stops depending on its own initial condition and
+      becomes a <strong>function of the driver</strong>: $\boldsymbol{r}(t) = \boldsymbol{\phi}(\boldsymbol{x}(t))$.
+      This is <em>generalized synchronization</em> (GS). The network is now a living, continuously
+      updated encoding of the world's hidden state &mdash; exactly the embedding we wanted, formed
+      automatically by the coupling.
+    </p>
+
+    <h3>3. Invertibility: from embedding to prediction</h3>
+    <p>
+      An embedding is only useful for forecasting if we can read the world back out of it. The key
+      condition is that the synchronization map $\boldsymbol{\phi}$ be <strong>invertible</strong>
+      &mdash; a diffeomorphism, not a many-to-one collapse. When
+      $\boldsymbol{\phi}$ is invertible, a trained linear (or simple) readout $\psi$ can recover the
+      next observable, and the encode–decode pair
+    </p>
+    <div class="eq">
+      $$ \boldsymbol{x} \;\xrightarrow{\ \boldsymbol{\phi}\ }\; \boldsymbol{r} \;\xrightarrow{\ \psi\ }\; \hat{s} $$
+    </div>
+    <p>
+      composes into a faithful model of the flow. Closing the loop &mdash; feeding $\hat{s}$ back as
+      the next input &mdash; turns the driven system into an <em>autonomous</em> replica of the
+      original dynamics. I call this mechanism <strong>invertible generalized synchronization</strong>,
+      and I argue it is a general principle for how recurrent systems, artificial and biological,
+      implicitly learn dynamics
+      (<a href="../../publications.html">Lu &amp; Bassett, <em>Chaos</em> 2020</a>).
+    </p>
+
+    <h3>4. Transverse stability: what makes the embedding hold</h3>
+    <p>
+      Synchronization is only worth having if it is <strong>stable</strong>. The set of states
+      satisfying $\boldsymbol{r} = \boldsymbol{\phi}(\boldsymbol{x})$ forms a
+      <em>synchronization manifold</em> in the joint space; learning succeeds precisely when this
+      manifold is <strong>transversely stable</strong> &mdash; small perturbations off the manifold
+      decay rather than grow. Formally, the <em>conditional Lyapunov exponents</em> (the transverse
+      ones) must be negative:
+    </p>
+    <div class="eq">
+      $$ \lambda_\perp < 0. $$
+    </div>
+    <p>
+      Transverse stability is what lets a single trained readout generalize: any drive from the
+      source is pulled onto the same reproducible embedding, so the model's predictions do not
+      depend on where it happened to start. It is also the knob that separates a network that
+      memorizes from one that <em>learns the dynamics</em>.
+    </p>
+
+    <h3>Synchronize &mdash; or hop</h3>
+    <p>
+      This is the first of two mechanisms in the talk. Recurrent models predict the dynamical world
+      by <strong>synchronizing</strong> to it: forming an invertible, transversely-stable embedding
+      that can be run forward. Modern transformers, by contrast, predict by <strong>hopping</strong>
+      between basins on a learned energy landscape &mdash; the subject of
+      <a href="../attention-energy-landscape/">Part II</a>. Two very different architectures, two
+      complementary geometric stories about the same goal: forecasting a changing world.
+    </p>
+
+    <p class="section-sub" style="margin-top:24px">
+      Related reading:
+      <a href="../../publications.html">Attractor reconstruction by machine learning</a> ·
+      <a href="../../publications.html">Reservoir observers</a> ·
+      <a href="../../publications.html">Model-free prediction of spatiotemporal chaos</a>.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Zhixin Lu · <a href="mailto:zhixin.lu@alleninstitute.org">zhixin.lu@alleninstitute.org</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

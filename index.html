@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zhixin Lu — Dynamical AI &amp; AI for Dynamics</title>
-<meta name="description" content="Zhixin Lu, Scientist II at the Allen Institute. Research on the dynamical-systems foundation of intelligence: dynamical AI and AI for understanding dynamics.">
+<meta name="description" content="Zhixin Lu, Scientist at the Allen Institute. Research on the dynamical-systems foundation of intelligence: dynamical AI and AI for understanding dynamics.">
 <link rel="icon" href="assets/img/ring.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -33,7 +33,7 @@
   <div class="container">
     <div>
       <h1>Zhixin Lu, Ph.D.</h1>
-      <div class="role">Scientist II @ Allen Institute</div>
+      <div class="role">Scientist @ Allen Institute</div>
       <div class="affil">615 Westlake Ave North, Seattle, WA 98109</div>
       <p class="lede">
         I build a <strong>dynamical-systems and stochastic-process foundation for
@@ -57,24 +57,36 @@
 <section class="block">
   <div class="container">
     <h2 class="section-title">About <span class="accent">me</span></h2>
-    <p class="section-sub">Bio-inspired &amp; physically-grounded computation.</p>
+    <p class="section-sub">Turning dynamical-systems theory into learning machines that work.</p>
     <p style="max-width:820px">
-      Back in August 2017, I received my Ph.D. at the University of Maryland, College Park,
-      studying nonlinear dynamics and machine learning under the mentorship of
-      <a href="https://umdphysics.umd.edu/people/faculty/current/item/380-edott.html" target="_blank" rel="noopener">Dr. Edward Ott</a>.
-      I then continued as a postdoc in the
-      <a href="https://complexsystemsupenn.com/" target="_blank" rel="noopener">Complex Systems Group</a>
-      led by <a href="https://complexsystemsupenn.com/personal" target="_blank" rel="noopener">Dr. Danielle S. Bassett</a>
-      at the University of Pennsylvania. I am now a Scientist II at the Allen Institute,
-      studying the intersection between biological and artificial intelligence.
+      I ask a single question in many guises: <strong>how do learning machines come to
+      understand the dynamical world — and how can dynamics, in turn, teach us to build
+      better learning machines?</strong> My work pairs first-principles theory with concrete,
+      testable systems, and I care most about ideas that are both <em>provably grounded</em>
+      and <em>demonstrably useful</em>.
     </p>
     <p style="max-width:820px; margin-top:14px">
-      I am especially drawn to <strong>bio-inspired</strong> and <strong>physically-grounded
-      computation</strong>: architectures derived from how biological neural systems learn,
-      and learning machines implementable in non–von&nbsp;Neumann physical substrates rather
-      than only digital hardware. This connects foundational theory to modern architectures —
-      transformers, diffusion models, SSMs, RNNs, reservoir computers, and world models — and
-      to the neuroscience of how brains represent and forecast the dynamical world.
+      That approach has produced results I'm proud of. I showed that reservoir computers can
+      predict large, spatiotemporally chaotic systems from data alone — work that
+      <a href="https://www.quantamagazine.org/machine-learnings-amazing-ability-to-predict-chaos-20180418/" target="_blank" rel="noopener"><em>Quanta Magazine</em> called machine learning's "amazing" ability to predict chaos</a>.
+      I introduced <strong>reservoir observers</strong> that infer unmeasured variables of a
+      chaotic system, taught recurrent networks to
+      <a href="publications.html">infer global temporal structure from purely local examples</a>
+      (<em>Nature Machine Intelligence</em>), and demonstrated <strong>chaotic source
+      separation with a literal tank of water</strong> — a physical, non–von&nbsp;Neumann learning machine.
+    </p>
+    <p style="max-width:820px; margin-top:14px">
+      Running through all of it is one theoretical thread I keep sharpening:
+      <strong>invertible generalized synchronization</strong> as a mechanism by which recurrent
+      systems learn to embed and predict dynamics, and a
+      <a href="blog/attention-energy-landscape/">geometric, energy-landscape view of attention</a>
+      that reframes transformers as hopping between basins on a learned landscape. I bring these
+      insights to bio-inspired and physically-grounded computation, and to the neuroscience of
+      how brains represent and forecast a changing world.
+    </p>
+    <p style="max-width:820px; margin-top:14px" class="section-sub">
+      Scientist at the Allen Institute · Ph.D. with Edward Ott (Maryland) · postdoc with
+      Danielle Bassett (UPenn). <a href="cv.html">Full background &amp; CV →</a>
     </p>
   </div>
 </section>
@@ -122,14 +134,23 @@
 <!-- HIGHLIGHT: SFI talk -->
 <section class="block">
   <div class="container">
-    <h2 class="section-title">Latest <span class="accent">talk</span></h2>
+    <h2 class="section-title">From the <span class="accent">blog</span></h2>
+    <p class="section-sub">My Santa Fe Institute talk, in two parts: <em>Synchronize or Hop</em>.</p>
     <div class="post-card">
-      <h3><a href="blog/attention-energy-landscape/">Attention as Energy-Landscape Hopping</a></h3>
-      <div class="meta"><span class="venue">Santa Fe Institute</span> · Invited talk · May 2026</div>
+      <h3><a href="blog/recurrent-prediction-generalized-synchronization/">Part I · How Recurrent Models Learn to Predict Dynamics</a></h3>
+      <div class="meta"><span class="venue">Santa Fe Institute</span> · May 2026</div>
       <p>
-        An interactive derivation showing that self-attention is a single step of the
-        Concave–Convex Procedure (CCCP) on a Gaussian-mixture energy landscape — a "hop"
-        along the surface normal. Read the write-up and play with the live demo.
+        Recurrent models forecast the world by <strong>synchronizing</strong> to it — forming a
+        delayed embedding and holding it transversely stable through invertible generalized
+        synchronization.
+      </p>
+    </div>
+    <div class="post-card">
+      <h3><a href="blog/attention-energy-landscape/">Part II · Attention as Energy-Landscape Hopping</a></h3>
+      <div class="meta"><span class="venue">Santa Fe Institute</span> · May 2026</div>
+      <p>
+        Transformers forecast by <strong>hopping</strong> between basins on a learned energy
+        landscape — self-attention as one CCCP step, with a live interactive demo.
       </p>
     </div>
   </div>
