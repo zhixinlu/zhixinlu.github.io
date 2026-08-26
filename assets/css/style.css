@@ -81,9 +81,9 @@ a:hover { text-decoration: underline; }
 .hero .logo-wrap { text-align: center; }
 .hero .logo-wrap img {
   width: 100%; max-width: 320px; height: auto;
-  /* The PNG has a pure-black background; "screen" drops the black so only
-     the gold Möbius glow shows, blending it into the page. */
-  mix-blend-mode: screen;
+  /* The PNG carries its own luminance-keyed alpha, so the gold Möbius fades into
+     the page by itself. No blend mode -> the gold stays vivid and identical in
+     every browser (Chrome used to desaturate the old mix-blend-mode: screen). */
   filter: drop-shadow(0 0 45px rgba(229,168,59,0.30));
 }
 .hero .cta { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; }
