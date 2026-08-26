@@ -1,0 +1,379 @@
+%==============================================================================
+%  Zhixin Lu — Curriculum Vitae
+%  Compile with:  pdflatex Zhixin_Lu_CV.tex   (run twice for the page footer)
+%
+%  Structure of this file
+%    1. Preamble ....... packages, colors, fonts, section styling
+%    2. Custom macros .. \entry, \note, publication list, etc. (edit these to
+%                        change the look everywhere at once)
+%    3. Document ....... the actual CV content, one \section per block
+%
+%  To add a publication: copy a \pub line at the top of the list and bump the
+%  number. To add a talk/award/etc.: copy an \entry line inside that section.
+%==============================================================================
+\documentclass[11pt]{article}
+
+%------------------------------ 1. Preamble -----------------------------------
+% Engine-robust font setup: compiles with pdflatex, xelatex, or lualatex so the
+% accented names (Kuśmierz, Łukasz, Cardeña, Görring) and em dashes just work.
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}    % UTF-8 source (handles ś, Ł, ñ, ö, ...)
+  \usepackage[T1]{fontenc}       % proper accented glyphs in the PDF
+  \usepackage{lmodern}           % clean default font. For Times: newtxtext,newtxmath
+\else
+  \usepackage{fontspec}          % xelatex / lualatex read UTF-8 natively
+\fi
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}           % subtle typographic polish
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+% --- Brand colors (the "AI for Dynamics" golden ring) ---
+\definecolor{accent}{HTML}{B8860B}   % dark gold, used for section rules
+\definecolor{ink}{HTML}{1A1A1A}      % near-black for headings
+
+\hypersetup{
+  colorlinks=true,
+  urlcolor=accent,
+  linkcolor=accent,
+  pdftitle={Zhixin Lu — Curriculum Vitae},
+  pdfauthor={Zhixin Lu}
+}
+
+% --- Section headings: small caps with a gold rule underneath ---
+\titleformat{\section}
+  {\large\bfseries\scshape\color{ink}}
+  {}{0pt}{}[{\color{accent}\titlerule[1.1pt]}]
+\titlespacing*{\section}{0pt}{16pt}{6pt}
+
+% --- Page footer:  "Zhixin Lu" left, page number right ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[L]{\small Zhixin Lu}
+\fancyfoot[R]{\small \thepage}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+
+%------------------------------ 2. Custom macros ------------------------------
+
+% A two-column dated row: left text wraps, right (date) stays top-right aligned.
+% Usage: \entry{Institution, Location — Role}{2021 -- present}
+\newcommand{\entry}[2]{%
+  \par\smallskip\noindent
+  \begin{minipage}[t]{0.80\textwidth}\raggedright #1\end{minipage}\hfill
+  \begin{minipage}[t]{0.18\textwidth}\raggedleft\textbf{#2}\end{minipage}\par}
+
+% A muted description / focus line placed under an \entry.
+\newcommand{\note}[1]{\noindent{\small\itshape #1}\par}
+
+% Publication list: manual numbering so entries are trivial to reorder.
+% Usage:  \pub{21} Author list, \textbf{Zhixin Lu}, ... \emph{Journal} year.
+\newenvironment{publist}{%
+  \begin{list}{}{%
+    \setlength{\leftmargin}{2.4em}%
+    \setlength{\labelwidth}{1.9em}%
+    \setlength{\labelsep}{0.5em}%
+    \setlength{\itemsep}{5pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{4pt}}}%
+  {\end{list}}
+\newcommand{\pub}[1]{\item[\textbf{#1.}]}
+
+% Compact bullet list preset used for awards / reviewing.
+\newlist{tight}{itemize}{1}
+\setlist[tight]{leftmargin=1.4em, itemsep=3pt, topsep=4pt, parsep=0pt}
+
+%------------------------------ 3. Document -----------------------------------
+\begin{document}
+
+%--- Header -------------------------------------------------------------------
+\begin{minipage}[t]{0.72\textwidth}
+  {\LARGE\bfseries Zhixin Lu, Ph.D.}\\[3pt]
+  {\large Scientist @ Allen Institute}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.26\textwidth}
+  \raggedleft\small Prepared: July 23, 2026
+\end{minipage}
+
+\medskip
+\noindent
+615 Westlake Ave North, Seattle, WA 98109\\
+\href{mailto:zhixin.lu@alleninstitute.org}{zhixin.lu@alleninstitute.org}
+\quad\textbar\quad
+\href{https://zhixinlu.github.io}{Personal Website}
+\quad\textbar\quad
+\href{https://scholar.google.com/citations?hl=en&user=ZnBE8XUAAAAJ}{Google Scholar}
+
+%--- Focus --------------------------------------------------------------------
+\section{Focus}
+My research develops a \textbf{dynamical-systems and stochastic-process foundation
+for intelligence}, using it both to design new learning algorithms and
+architectures (\emph{dynamical AI}) and to build AI that understands, predicts,
+and controls the dynamical world (\emph{AI for dynamics}). I am especially drawn
+to bio-inspired and physically-grounded computation: architectures derived from
+how biological neural systems learn, and learning machines implementable in
+non--von Neumann physical substrates rather than only digital hardware. This
+endeavor connects foundational theory to modern architectures (e.g.,
+transformers, diffusion models, SSMs, RNNs, reservoir computers, and world
+models) and to the neuroscience of how brains represent and forecast the
+dynamical world.
+
+%--- Employment & Education ---------------------------------------------------
+\section{Employment, Education \& Invited Visits}
+
+\entry{\textbf{Allen Institute}, Seattle, WA — Scientist II}{2021 -- present}
+\note{Designing AI that understands the dynamical world; designing dynamical AI;
+bio-inspired AI; dynamical-systems theory of learning and intelligence.}
+
+\entry{\textbf{Santa Fe Institute}, Santa Fe, NM — Invited Speaker \& Visiting Scientist}{May 2026}
+\note{Host: Yuanzhao Zhang. Two underlying principles for sequential prediction
+from recurrent models and transformers.}
+
+\entry{\textbf{University of Pennsylvania}, Philadelphia, PA — Postdoctoral Researcher, Dept.\ of Bioengineering}{2017 -- 2021}
+\note{Supervisor: Dr.\ Danielle S.\ Bassett. Artificial intelligence; nonlinear
+dynamical systems; cognitive computational neuroscience.}
+
+\entry{\textbf{University of Maryland}, College Park, MD — Ph.D.\ in Chemical Physics (IPST)}{2011 -- 2017}
+\note{Supervisor: Dr.\ Edward Ott. Dissertation: ``Dynamics of large systems of
+nonlinearly evolving units.''}
+
+\entry{\textbf{Tsinghua University}, Beijing, China — Research Assistant, Dept.\ of Physics}{2010 -- 2011}
+\note{Supervisor: Prof.\ Yueheng Lan. Nonlinear dynamical systems.}
+
+\entry{\textbf{Shandong Normal University}, Shandong, China — B.S.\ in Physics}{2006 -- 2010}
+
+%--- Publications -------------------------------------------------------------
+\section{Publications \textnormal{\normalsize ($>$4000 citations)}}
+
+\subsection*{Published / In Press}
+\begin{publist}
+\pub{21} Calvin Yeung, Kris Ganjam, Zihan Zhang, Stefan Mihalas, and \textbf{Zhixin Lu}.
+  ``A dataset of differentiable biologically-derived single neuron models.''
+  \emph{Cell Reports Methods} (accepted).
+\pub{20} \textbf{Zhixin Lu}, Łukasz Kuśmierz, and Stefan Mihalas.
+  ``Identifying Stochastic Dynamics from Non-Sequential Data (DyNoSeD).''
+  \emph{Chaos: An Interdisciplinary Journal of Nonlinear Science} 36, no.\ 2 (2026).
+\pub{19} Jason Z.\ Kim, Ling-Wei Kong, and \textbf{Zhixin Lu}.
+  ``SIGMa-DS: System identification from the geometric manifold of dynamical
+  synchronization.'' \emph{Chaos} 35, no.\ 10 (2025).
+\pub{18} Łukasz Kuśmierz, Ulises Pereira-Obilinovic, \textbf{Zhixin Lu}, Dana Mastrovito,
+  and Stefan Mihalas. ``Hierarchy of chaotic dynamics in random modular networks.''
+  \emph{Physical Review Letters} 134, no.\ 14 (2025): 148402.
+\pub{17} Xiaosong He, Lorenzo Caciagli, Linden Parkes, Jennifer Stiso, Teresa M.\ Karrer,
+  Jason Z.\ Kim, \textbf{Zhixin Lu}, Tommaso Menara, Fabio Pasqualetti, Michael R.\ Sperling,
+  Joseph I.\ Tracy, and Dani S.\ Bassett. ``Uncovering the biological basis of control
+  energy: structural and metabolic correlates of energy inefficiency in temporal lobe
+  epilepsy.'' \emph{Science Advances} 8, no.\ 45 (2022): eabn2293.
+\pub{16} Jason Z.\ Kim, \textbf{Zhixin Lu}, Ann S.\ Blevins, and Dani S.\ Bassett.
+  ``Nonlinear Dynamics and Chaos in Conformational Changes of Mechanical Metamaterials.''
+  \emph{Physical Review X} 12, no.\ 1 (2022): 011042.
+\pub{15} Lindsay M.\ Smith, Jason Z.\ Kim, \textbf{Zhixin Lu}, and Dani S.\ Bassett.
+  ``Learning continuous chaotic attractors with a reservoir computer.''
+  \emph{Chaos} 32, no.\ 1 (2022): 011101.
+\pub{14} William Qian, Lia Papadopoulos, \textbf{Zhixin Lu}, Keith A.\ Kroma-Wiley,
+  Fabio Pasqualetti, and Dani S.\ Bassett. ``Path-dependent dynamics induced by
+  rewiring networks of inertial oscillators.'' \emph{Physical Review E} 105, no.\ 2
+  (2022): 024304.
+\pub{13} Jason Z.\ Kim, \textbf{Zhixin Lu}, Erfan Nozari, George J.\ Pappas, and
+  Danielle S.\ Bassett. ``Teaching recurrent neural networks to infer global temporal
+  structure from local examples.'' \emph{Nature Machine Intelligence} 3, no.\ 4 (2020):
+  316--323.
+\pub{12} \textbf{Zhixin Lu} and Danielle S.\ Bassett. ``Invertible Generalized
+  Synchronization: A Putative Mechanism for Implicit Learning in Neural Systems.''
+  \emph{Chaos} 30, no.\ 6 (2020): 063133.
+\pub{11} Aaron F.\ Alexander-Bloch, Armin Raznahan, Simon N.\ Vandekar, Jakob Seidlitz,
+  \textbf{Zhixin Lu}, Samuel R.\ Mathias, Emma Knowles, Josephine Mollon, Amanda Rodrigue,
+  Joanne E.\ Curran, Harald H.\,H.\ Görring, Theodore D.\ Satterthwaite, Raquel E.\ Gur,
+  Danielle S.\ Bassett, Gil D.\ Hoftman, Godfrey Pearlson, Russell T.\ Shinohara,
+  Siyuan Liu, Peter T.\ Fox, Laura Almasy, John Blangero, and David C.\ Glahn.
+  ``Imaging Local Genetic Influences on Cortical Folding.''
+  \emph{Proceedings of the National Academy of Sciences} 117, no.\ 13 (2020): 7430--7436.
+\pub{10} Zaixu Cui, Jennifer Stiso, Graham L.\ Baum, Jason Z.\ Kim, David R.\ Roalf,
+  Richard F.\ Betzel, Shi Gu, \textbf{Zhixin Lu}, Cedric H.\ Xia, Xiaosong He, Rastko Ciric,
+  Desmond J.\ Oathes, Tyler M.\ Moore, Russell T.\ Shinohara, Kosha Ruparel,
+  Christos Davatzikos, Fabio Pasqualetti, Raquel E.\ Gur, Ruben C.\ Gur,
+  Danielle S.\ Bassett, and Theodore D.\ Satterthwaite. ``Optimization of energy state
+  transition trajectory supports the development of executive function during youth.''
+  \emph{eLife} 9 (2020): e53060.
+\pub{9} \textbf{Zhixin Lu}, Jason Z.\ Kim, and Danielle S.\ Bassett.
+  ``Supervised chaotic source separation by a tank of water.''
+  \emph{Chaos} 30, no.\ 2 (2020): 021101.
+\pub{8} Jason Z.\ Kim, \textbf{Zhixin Lu}, Steven H.\ Strogatz, and Danielle S.\ Bassett.
+  ``Conformational control of mechanical networks.'' \emph{Nature Physics} 15, no.\ 7
+  (2019): 714--720.
+\pub{7} \textbf{Zhixin Lu}, Brian R.\ Hunt, and Edward Ott. ``Attractor Reconstruction
+  by Machine Learning.'' \emph{Chaos} 28, no.\ 6 (2018): 061104.
+\pub{6} Jaideep Pathak, Brian R.\ Hunt, Michelle Girvan, \textbf{Zhixin Lu}, and Edward Ott.
+  ``Model-free Prediction of Large Spatiotemporally Chaotic Systems from Data: A Reservoir
+  Computing Approach.'' \emph{Physical Review Letters} 120, no.\ 2 (2018): 024102.
+\pub{5} Jaideep Pathak, \textbf{Zhixin Lu}, Brian R.\ Hunt, Michelle Girvan, and Edward Ott.
+  ``Using Machine Learning to Replicate Chaotic Attractors and Calculate Lyapunov
+  Exponents from Data.'' \emph{Chaos} 27, no.\ 12 (2017): 121102.
+\pub{4} \textbf{Zhixin Lu}, Jaideep Pathak, Brian R.\ Hunt, Michelle Girvan, Roger Brockett,
+  and Edward Ott. ``Reservoir Observers: Model-free Inference of Unmeasured Variables in
+  Chaotic Systems.'' \emph{Chaos} 27, no.\ 4 (2017): 041102.
+\pub{3} \textbf{Zhixin Lu}, Shane Squires, Edward Ott, and Michelle Girvan.
+  ``Inhibitory Neurons Promote Robust Critical Firing Dynamics in Networks of
+  Integrate-and-fire Neurons.'' \emph{Physical Review E} 94, no.\ 6 (2016): 062309.
+\pub{2} \textbf{Zhixin Lu}, Kevin Klein-Cardeña, Steven Lee, Thomas M.\ Antonsen,
+  Michelle Girvan, and Edward Ott. ``Resynchronization of Circadian Oscillators and the
+  East-West Asymmetry of Jet-Lag.'' \emph{Chaos} 26, no.\ 9 (2016): 094811.
+\pub{1} \textbf{Zhixin Lu}, Christopher Jarzynski, and Edward Ott. ``Apparent Topologically
+  Forbidden Interchange of Energy Surfaces under Slow Variation of a Hamiltonian.''
+  \emph{Physical Review E} 91, no.\ 5 (2015): 052913.
+\end{publist}
+
+\subsection*{Under Review / In Preparation}
+\begin{publist}
+\pub{1} Harshil Sharma, Xiao-Ping Liu, Thomas Chartrand, Brian Kalmbach, Stefan Mihalas,
+  and \textbf{Zhixin Lu}. ``The Unreasonable Effectiveness of Cell Types in Describing
+  Neuronal Physiological Features.'' (In preparation).
+\end{publist}
+
+\subsection*{Non-peer Reviewed}
+\begin{publist}
+\pub{1} Thomas M.\ Antonsen, Michelle Girvan, \textbf{Zhixin Lu}, and Edward Ott.
+  ``Explaining the East/West Asymmetry of Jet Lag.'' \emph{SIAM News} 50, no.\ 2 (2017).
+\end{publist}
+
+%--- Presentations ------------------------------------------------------------
+\section{Presentations}
+
+\subsection*{Invited Talks}
+\entry{``From Snapshots to Dynamics: Stochastic System Identification without Time Series.''
+  Biological Physics / Physical Biology (BPPB) Virtual Seminar Series}{2026}
+\entry{``Synchronize or Hop: Two Mechanisms for Predicting the Dynamical World in Modern
+  ML Models.'' Santa Fe Institute, Santa Fe, NM}{2026}
+\entry{``How recurrent neural networks infer dynamical models from data for prediction,
+  inference, and source separation.'' APS March Meeting, Las Vegas, NV}{2023}
+\entry{``Invertible Generalized Synchronization: A General Principle for Dynamical Learning
+  in Neural Networks.'' Advanced Network Science Initiative, Los Alamos National
+  Laboratory}{2021}
+\entry{``Invertible Generalized Synchronization: A General Principle for Dynamical Learning
+  in Neural Networks.'' Lanzhou Center for Theoretical Physics (Virtual)}{2021}
+\entry{``A putative mechanism for implicit learning in biological and artificial neural
+  systems.'' Applied Dynamics Seminar, University of Maryland, College Park, MD}{2019}
+\entry{``Structural universality and Hebbian-like learning in an optimal context integration
+  network.'' Summer Workshop on the Dynamic Brain, Friday Harbor, WA}{2017}
+\entry{``Toward a theory of reservoir computing prediction.'' Applied Dynamics Seminar,
+  University of Maryland, College Park, MD}{2017}
+\entry{``Can topologically forbidden interchange of energy surfaces occur under slow
+  variation of a Hamiltonian?'' Informal Statistical Physics Seminar, IPST, University of
+  Maryland, College Park, MD}{2015}
+
+\subsection*{Conference Talks}
+\entry{``Transformer Hops: A Geometric View of How Attention Computes.''
+  NeuroAI, Seattle, WA}{2026}
+\entry{``A First-Principles Method for Learning Dynamics from Non-temporal Data.''
+  Cell Modeling in Space and Time, Cold Spring Harbor Laboratory (CSHL), NY}{2026}
+\entry{``Inferring the Time-Averaged Jacobian Matrix of the Wilson-Cowan Model with a
+  Machine Learning Method.'' SIAM Conference on Applications of Dynamical Systems (DS21),
+  Online}{2021}
+\entry{``Chaotic source separation solved by a tank of water through invertible generalized
+  synchronization.'' APS March Meeting, Denver, CO}{2020}
+\entry{``Why do reservoir computing networks predict chaotic systems so well.''
+  APS March Meeting, New Orleans, LA}{2017}
+\entry{``Inhibitory neurons promote robust critical firing dynamics in networks of
+  integrate-and-fire neurons.'' Dynamics Day, Silver Spring, MD}{2017}
+
+\subsection*{Award-Winning Posters}
+\entry{``Resynchronization of circadian oscillators and the east-west asymmetry of jet-lag.''
+  1st prize, IPST Spring Banquet, University of Maryland, College Park, MD}{2016}
+
+%--- Teaching -----------------------------------------------------------------
+\section{Teaching Experience}
+
+\subsection*{Students Advised — Allen Institute, Seattle, WA}
+\entry{Harshil Sharma, Undergraduate @ University of Washington}{2023 -- present}
+\entry{Calvin Yeung, Ph.D.\ Student, Math \& Computer Science @ UC Irvine.
+  \emph{The role of temporal complexity in neuronal computations.}}{Summer 2023}
+\entry{Rachel Ding, Undergraduate, Computation \& Neural Systems @ Caltech.
+  \emph{Modeling single neuron dynamics using electrophysiological data.}}{Summer 2022}
+
+\subsection*{Students Advised — University of Pennsylvania, Philadelphia, PA}
+\entry{Jason Z.\ Kim, Ph.D.\ Student of Bioengineering.
+  \emph{Reservoir computing; nonlinear dynamical systems and chaos.}}{2017 -- 2020}
+\entry{William Qian, Undergraduate of Physics \& Computer Science.
+  \emph{Path-dependent dynamics in networks of oscillators.}}{2019 -- 2020}
+\entry{Lindsay M.\ Smith, Undergraduate of Physics.
+  \emph{Dynamical capacity of reservoir computers.}}{2021 -- 2022}
+
+\subsection*{Students Advised — University of Maryland, College Park, MD}
+\entry{Steven Lee, Summer Undergraduate of Physics \& Math.
+  \emph{Modeling the dynamics of jet-lag recovery.}}{Summer 2015}
+\entry{Kevin Klein-Cardeña, Summer Undergraduate of Math.
+  \emph{Modeling the dynamics of jet-lag recovery.}}{Summer 2015}
+
+\subsection*{Teaching Assistant — University of Maryland, College Park, MD \textnormal{\small (2011 -- 2017)}}
+\entry{Introduction to Statistical Thermodynamics, Dept.\ of Physics}{Fall 2011}
+\entry{Principles of Modern Physics, Dept.\ of Physics}{Fall 2011}
+\entry{Classical Mechanics, Dept.\ of Physics}{Spring 2012}
+\entry{Differential Equations for Scientists and Engineers, Dept.\ of Mathematics}{Fall 2012}
+\entry{Applied Probability and Statistics I, Dept.\ of Mathematics}{Spring 2013}
+\entry{Chaotic Dynamics, Dept.\ of Physics}{Fall 2014}
+
+\subsection*{Teaching Assistant — Tsinghua University, Beijing, China \textnormal{\small (2010 -- 2011)}}
+\entry{Nonlinear Dynamics and Chaos, Dept.\ of Physics}{Fall 2010}
+
+%--- Honors & Awards ----------------------------------------------------------
+\section{Honors \& Awards}
+\entry{Most downloaded and cited articles in \emph{Chaos}}{2018}
+\entry{Most downloaded articles in \emph{Chaos}}{2017}
+\entry{Best in Show Award, Summer Workshop on the Dynamic Brain, Friday Harbor, WA}{2017}
+\entry{Travel Award, Dynamics Day, Silver Spring, MD}{2017}
+\entry{1st Place Poster Prize, IPST Spring Banquet, University of Maryland, College Park, MD}{2016}
+\entry{Merit Fellowship Award, University of Maryland, College Park, MD}{2013}
+\entry{Dean's Fellowship Award, University of Maryland, College Park, MD}{2011}
+\entry{Second Prize, Chinese National Challenge Cup Technology Competition, Shandong, China}{2009}
+
+%--- Media --------------------------------------------------------------------
+\section{Major Media Coverage}
+\entry{``Quantifying abstraction in neural networks to increase understanding of human brain
+  processing.'' Anne Cockshott, \href{https://aip.scitation.org/doi/10.1063/10.0009079}{\emph{AIP Scilight}}, Jan.\ 4, 2022.}{2022}
+\entry{``Solving the Chaotic Source Separation Problem.'' Meeri Kim,
+  \href{https://aip.scitation.org/doi/10.1063/10.0000783}{\emph{AIP Scilight}}, Feb.\ 7, 2020.}{2020}
+\entry{``Machine Learning's `Amazing' Ability to Predict Chaos.'' Natalie Wolchover,
+  \href{https://www.quantamagazine.org/machine-learnings-amazing-ability-to-predict-chaos-20180418/}{\emph{Quanta Magazine}}, Apr.\ 18, 2018.}{2018}
+\entry{``A `perfect' forecast? Machine learning may be the answer.'' Erin Wenckstern,
+  \href{https://www.theweathernetwork.com/news/articles/artificial-intelligence-machine-learning-robots-weather-prediction-chaos-theory-mathematics-university-of-maryland/102924}{\emph{The Weather Network}}, June 6, 2018.}{2018}
+\entry{``Unraveling the jet-lag asymmetry.'' Ashley G.\ Smart,
+  \href{https://physicstoday.scitation.org/doi/10.1063/PT.3.3323}{\emph{Physics Today}}, Oct.\ 1, 2016.}{2016}
+\entry{``Why Jet Lag Can Feel Worse When You Travel from West to East.'' Joanna Klein,
+  \href{https://www.nytimes.com/2016/07/16/science/jet-lag-east-west.html}{\emph{The New York Times}}, July 15, 2016.}{2016}
+\entry{``So That's Why Jet Lag Feels Worse When You Fly East.'' Suzy Strutner,
+  \href{https://www.huffpost.com/entry/jet-lag-circadian-rhythm_n_5788e090e4b0867123e0c6cd}{\emph{HuffPost}}, July 15, 2016.}{2016}
+\entry{``Study: Flying east is tougher on us than flying west.'' Arden Dier,
+  \href{https://www.foxnews.com/travel/study-flying-east-is-tougher-on-us-than-flying-west}{\emph{Fox News}}, July 14, 2016.}{2016}
+\entry{``Why your eastward jet lag is worse, according to math.'' Aria Hangyu Chen,
+  \href{https://www.cnn.com/2016/07/13/health/eastward-jet-lag-worse/index.html}{\emph{CNN}}, July 13, 2016.}{2016}
+\entry{``Researchers explain why jet lag can be worse when you travel east.'' Ben Guarino,
+  \href{https://www.washingtonpost.com/news/morning-mix/wp/2016/07/13/researchers-explain-why-jet-lag-can-be-worse-when-you-travel-east/}{\emph{The Washington Post}}, July 13, 2016.}{2016}
+\entry{``Scientists Break Down Why Flying East Is Worse for Jet Lag.'' Gillian Mohney and
+  Dr.\ Imran Aslam, \href{https://abcnews.go.com/Health/scientists-break-flying-east-worse-jet-lag/story?id=40521154}{\emph{ABC News}}, July 13, 2016.}{2016}
+\entry{``Mathematics could explain why jet lag seems worse when travelling east rather than
+  west.'' \href{https://www.researchgate.net/blog/post/mathematics-could-explain-why-jet-lag-seems-worse-when-travelling-east-rather-than-west}{\emph{ResearchGate News}}, July 12, 2016.}{2016}
+
+%--- Service ------------------------------------------------------------------
+\section{Service}
+
+\subsection*{Peer Reviewing}
+Reviewer for 15 journals: \emph{Physical Review Letters}; \emph{Nature Machine Intelligence};
+\emph{Nature Communications}; \emph{IEEE Transactions on Neural Networks and Learning Systems};
+\emph{Chaos}; \emph{Journal of Nonlinear Science}; \emph{Scientific Reports}; \emph{SIAM Review};
+\emph{PLoS One}; \emph{Neural Networks}; \emph{Chaos, Solitons \& Fractals};
+\emph{Earth System Dynamics}; \emph{Entropy}; \emph{Electronics}; \emph{Philosophies}.
+
+\subsection*{Other}
+Invited panelist, ``The Ability of Artificial Intelligence Algorithms in New Computer
+Experiments to Tell the Future of Chaotic [Systems]'' —
+\href{https://globalinsurancesummit2019.com/speakers/}{2019 Global Insurance Summit},
+New York City, NY.
+
+\end{document}
