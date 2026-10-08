@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Stable Generation Can Have an Arrow of Time — Zhixin Lu</title>
+<meta name="description" content="An intuitive guide to a geometric obstruction to exact, stable generation of reversed chaos: connected unstable leaves, disconnected stable fibers, and an entropy contradiction.">
+<meta property="og:title" content="Why stable generation can have an arrow of time">
+<meta property="og:description" content="The intuition behind the theorem and proof in An Arrow of Time in Stable Autonomous Generation, by Zhixin Lu.">
+<meta property="og:type" content="article">
+<link rel="icon" href="../../assets/img/NewMobius.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="article.css">
+<script src="../../assets/js/math-config.js" defer></script>
+<script src="../../assets/vendor/mathjax-3.2.2/tex-svg.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to article</a>
+<nav class="nav" aria-label="Main navigation"><div class="container"><a class="brand" href="../../index.html"><img src="../../assets/img/NewMobius.png" alt="" width="36" height="36"> Zhixin Lu</a><div class="links"><a href="../../index.html">Home</a><a href="../../research.html">Research</a><a href="../../publications.html">Publications</a><a href="../../blog.html" class="active" aria-current="page">Blog</a><a href="../../press.html">Press</a><a href="../../cv.html">CV</a></div></div></nav>
+<main id="main">
+<header class="article-hero"><div class="article-container">
+  <a class="back-link" href="../../blog.html">← All writing</a>
+  <p class="eyebrow">Research notes <span aria-hidden="true">/</span> Dynamics &amp; learning</p>
+  <h1>Why stable generation<br>can have an <em>arrow of time</em></h1>
+  <p class="article-deck">Playing a trajectory backward is easy. Can another system generate that reversed motion on its own, with the same exact dynamics and an attracting state set?</p>
+  <p class="article-meta">Zhixin Lu <span aria-hidden="true">·</span> October 8, 2026 <span aria-hidden="true">·</span> An intuitive proof guide</p>
+  <div class="article-paper"><span>Based on my preprint</span><a href="https://arxiv.org/abs/2610.02845" target="_blank" rel="noopener">An Arrow of Time in Stable Autonomous Generation ↗</a><a class="text-link" href="https://arxiv.org/html/2610.02845v1" target="_blank" rel="noopener">Full theorem &amp; proof (v1) ↗</a></div>
+</div></header>
+<div class="article-container article-body">
+<nav class="article-contents" aria-label="Article contents"><a href="#question">The question</a><a href="#geometry">The geometry</a><a href="#proof">The proof</a><a href="#meaning">What it means</a></nav>
+<article>
+<section id="question">
+  <p class="opening">Imagine a model that has learned a chaotic signal. While measurements drive it, the model follows the signal closely. Now remove those measurements and let the model feed on its own output. Whether it keeps producing the right dynamics is a new question: the system must sustain the motion for itself.</p>
+  <p>My recent preprint asks whether this kind of autonomous generation can have a preferred direction of time. For a class of chaotic systems, including the classical Lorenz attractor, the answer is yes—when we ask for an <strong>exact realization on a compact attracting set</strong> by a finite-dimensional smooth autonomous system.</p>
+  <h2>Reversing motion is easier than restoring attraction</h2>
+  <p>Suppose a system obeys <span class="inline-math">\(\dot{x} = F(x)\)</span>. Replacing <span class="inline-math">\(F\)</span> with <span class="inline-math">\(-F\)</span> reverses its trajectories. But it also reverses the way nearby states approach or leave those trajectories: the original attraction becomes repulsion.</p>
+  <p>That alone is not an impossibility proof. Perhaps we could change the equations <em>away from</em> the desired motion and restore attraction. For a stable limit cycle, we can. Near a unit circle, for example, inward radial relaxation and angular motion can be specified separately:</p>
+  <div class="equation">\[\dot{r} = -(r - 1), \qquad \dot{\theta} = \pm 1.\]</div>
+  <p>Either angular direction works while the radius relaxes toward the same circle. Time reversal does not automatically prevent stable generation.</p>
+  <p>For the chaotic targets covered by my theorem, even a different smooth generator with additional hidden variables cannot solve the exact reversal problem under the stated assumptions. The reason combines two ingredients: <strong>the geometry of stable fibers</strong> and <strong>the rate at which dynamics produce distinguishable information</strong>.</p>
+  <aside class="key-idea"><p class="eyebrow">The central idea</p><p>Exact reversal forces a continuous readout to erase distinctions along the generator’s unstable leaves. An entropy theorem then says the output cannot retain the positive entropy required by the target chaos.</p></aside>
+</section>
+<section id="setup">
+  <h2>What must an exact generator do?</h2>
+  <p>Call the original target’s forward evolution <span class="inline-math">\(\phi_t\)</span>, the proposed generator’s evolution <span class="inline-math">\(\Psi_t\)</span>, and its readout <span class="inline-math">\(\pi\)</span>. The generator may have many more state variables than the target. Its output must obey</p>
+  <div class="equation">\[\pi(\Psi_t(z)) = \phi_{-t}(\pi(z)).\]</div>
+  <p>Every target state must be represented, and this equality must hold for every trajectory on the generator’s attracting set. The readout may be many-to-one; it only needs to be continuous. Attraction concerns the <strong>full generator state</strong>, including hidden variables. It means approaching the invariant set, not that nearby chaotic trajectories must converge to one another.</p>
+  <p>For the proof, sample time at an interval <span class="inline-math">\(\tau\)</span>. Write <span class="inline-math">\(f\)</span> for one original target step and <span class="inline-math">\(g\)</span> for one generator step. Then <span class="inline-math">\(\pi \circ g = f^{-1} \circ \pi\)</span>. The useful consequence is that <strong>backward generator time corresponds to forward time in the original target</strong>.</p>
+  <details><summary>The theorem’s hypotheses, more precisely</summary>
+    <div class="detail-body"><p>The target lives on a compact invariant set <span class="inline-math">\(A\)</span>. For a sampled map <span class="inline-math">\(f = \left.\phi_\tau\right|_A\)</span>, it has an ergodic invariant probability measure <span class="inline-math">\(\mu\)</span> with positive metric entropy. For some radius <span class="inline-math">\(\rho > 0\)</span>, the intrinsic local forward-stable fibers defined below are totally disconnected on a Borel set <span class="inline-math">\(E\)</span> with <span class="inline-math">\(\mu(E) > 0\)</span>.</p><p>The flow corollary excludes a finite-dimensional autonomous <span class="inline-math">\(C^2\)</span> vector field on a smooth manifold without boundary, with a compact invariant full-state set <span class="inline-math">\(\Lambda\)</span>, a continuous surjective readout <span class="inline-math">\(\pi: \Lambda \to A\)</span>, and the exact time-reversal relation above. Attraction is specified by a trapping neighborhood <span class="inline-math">\(U\)</span> with compact closure:</p><div class="equation">\[\begin{gathered}g(\overline{U}) \subset U,\\\Lambda = \bigcap_{n \ge 0} g^n(\overline{U}).\end{gathered}\]</div><p>The flow must be defined on <span class="inline-math">\(\overline{U}\)</span> through one sampling interval. The paper first proves a result for <span class="inline-math">\(C^2\)</span> diffeomorphisms of compact manifolds without boundary. For flows on a noncompact state space, it preserves the dynamics near the attracting set while modifying the distant geometry to apply that result. See Theorem 1 and Corollary 2 in the <a href="https://arxiv.org/html/2610.02845v1" target="_blank" rel="noopener">paper</a>.</p></div>
+  </details>
+</section>
+<section id="geometry">
+  <h2>The geometric mismatch</h2>
+  <p>A <strong>forward-stable fiber</strong> of a target point consists of points <em>inside the target set</em> whose original forward trajectories remain nearby and converge to its trajectory at matching times. The word “inside” matters: a smooth stable curve in the surrounding space can intersect an attractor in a much thinner set.</p>
+  <p>For the targets in the theorem, relevant local fibers are <strong>totally disconnected</strong>: every connected subset has at most one point. A dust of points is a useful picture, though the hypothesis does not require a particular Cantor set. It also does not say that the whole attractor is disconnected.</p>
+  <p>A hypothetical generator reproducing this positive-entropy target must also have positive entropy. Smooth ergodic theory then supplies <strong>unstable leaves</strong> through typical generator states. Their points approach one another under backward generator evolution. Locally, these leaves have connected patches—curves or higher-dimensional pieces, rather than dust. Reversal asks a continuous readout to map those connected patches into the original target’s disconnected stable fibers.</p>
+  <figure class="proof-figure">
+    <div class="geometry-grid">
+      <div class="geometry-panel"><p class="diagram-label">Generator</p><svg viewBox="0 0 300 140" role="img" aria-label="A connected local patch of a generator unstable leaf, illustrated by a smooth gold curve."><path d="M25 108 C70 15 105 25 142 73 S228 135 276 36" fill="none" stroke="#e7b65d" stroke-width="3"/><circle cx="142" cy="73" r="6" fill="#f0ca87"/><text x="147" y="56" fill="#f1f0ec" font-size="18" font-family="Georgia,serif">z</text></svg><p>A connected local patch<br>of an unstable leaf</p></div>
+      <div class="readout-arrow" aria-hidden="true"><span>\(\pi\)</span><span>\(\to\)</span></div>
+      <div class="geometry-panel"><p class="diagram-label">Original target</p><svg viewBox="0 0 300 140" role="img" aria-label="A schematic disconnected forward-stable fiber. One point x is highlighted; the whole connected patch must map to this same point."><g fill="#748195"><circle cx="28" cy="74" r="3"/><circle cx="35" cy="74" r="3"/><circle cx="51" cy="74" r="3"/><circle cx="58" cy="74" r="3"/><circle cx="91" cy="74" r="3"/><circle cx="98" cy="74" r="3"/><circle cx="115" cy="74" r="3"/><circle cx="122" cy="74" r="3"/><circle cx="186" cy="74" r="3"/><circle cx="203" cy="74" r="3"/><circle cx="210" cy="74" r="3"/><circle cx="243" cy="74" r="3"/><circle cx="250" cy="74" r="3"/><circle cx="267" cy="74" r="3"/><circle cx="274" cy="74" r="3"/></g><circle cx="179" cy="74" r="7" fill="#f0ca87"/><circle cx="179" cy="74" r="18" fill="none" stroke="#e7b65d" stroke-width="1"/><text x="174" y="39" fill="#f1f0ec" font-size="18" font-family="Georgia,serif">x</text></svg><p>The image lies in a totally disconnected fiber,<br>so it must be a single point</p></div>
+    </div>
+    <figcaption><strong>Continuity is the bottleneck.</strong> A connected patch has a connected image. Inside a totally disconnected fiber, that image can only be one point. Schematic, not a computed attractor or a plot of the full stable fiber.</figcaption>
+  </figure>
+</section>
+<section id="proof">
+  <p class="eyebrow">The proof in four steps</p>
+  <h2>From geometry to a contradiction</h2>
+  <p>Assume that the desired generator exists. The proof shows that its output would have to satisfy two incompatible requirements.</p>
+  <section class="proof-step" id="step-1"><div class="step-number" aria-hidden="true">01</div><div>
+    <h3>Attraction keeps whole unstable leaves inside the generator’s set</h3>
+    <p>Take a state on the generator’s attracting set and follow another point on its unstable leaf backward. The two points approach each other, so the second point eventually enters the trapping neighborhood of the set. Moving forward again places it in each sufficiently late nested image of that neighborhood. Their intersection is the attracting set itself.</p>
+    <p>This matters because the readout is only defined on the attracting set. The trapping argument lets us apply it to the <em>entire</em> unstable leaf.</p>
+  </div></section>
+  <section class="proof-step" id="step-2"><div class="step-number" aria-hidden="true">02</div><div>
+    <h3>Exact reversal forces the readout to collapse each leaf</h3>
+    <p>Choose a small connected patch on an unstable leaf. Backward generator trajectories from that patch remain close and converge. Through the continuous readout, their outputs therefore remain close and converge in the original target’s <em>forward</em> time:</p>
+    <div class="equation">\[\pi(g^{-n}(z)) = f^n(\pi(z)).\]</div>
+    <p>The patch’s output lies in a forward-stable fiber. If that fiber is totally disconnected, its only connected subsets are single points. The whole patch must therefore have the same output.</p>
+    <p>To extend this from a patch to a complete leaf, consider all leaf points with the same output as its starting point. Continuity makes that collection closed; the local patch argument makes it open. It is nonempty, and the leaf is connected. So it is the whole leaf.</p>
+    <details><summary>Why the patch can be chosen small enough</summary><div class="detail-body"><p>Uniform continuity of the readout on compact <span class="inline-math">\(\Lambda\)</span> converts a desired target radius into a generator-distance bound. Unstable-manifold estimates control backward iterates after sufficiently long time. Shrinking the patch also controls the finitely many earlier iterates. Thus the outputs stay within the required radius at every forward target step and converge synchronously. “Connected leaf” here refers to the leaf’s intrinsic manifold topology, even if the leaf winds through the ambient space.</p></div></details>
+  </div></section>
+  <section class="proof-step" id="step-3"><div class="step-number" aria-hidden="true">03</div><div>
+    <h3>Ergodicity makes the collapse typical</h3>
+    <p>The disconnected-fiber condition only has to hold on a set of positive probability under an ergodic target measure. Almost every target orbit eventually visits that set. Any local stable fiber maps forward into the stable fiber at the visited point; because forward evolution is invertible, disconnectedness there implies disconnectedness at the starting point too.</p>
+    <p>The same collapse argument therefore applies to whole unstable leaves through almost every generator state under an invariant measure that reproduces the target statistics.</p>
+    <details><summary>Why a positive-measure set is enough</summary><div class="detail-body"><p>With the same radius <span class="inline-math">\(\rho\)</span>, one has <span class="inline-math">\(f^n(C^s_\rho(x)) \subseteq C^s_\rho(f^n(x))\)</span>. If the latter fiber is totally disconnected, so is the former fiber, since <span class="inline-math">\(f^n\)</span> is a homeomorphism onto its image. Ergodicity makes the set of points that eventually visit <span class="inline-math">\(E\)</span> have full measure. The radius need not vary from point to point.</p></div></details>
+  </div></section>
+  <section class="proof-step" id="step-4"><div class="step-number" aria-hidden="true">04</div><div>
+    <h3>The output must have both zero and positive entropy</h3>
+    <p>Metric entropy measures a dynamical rate of distinguishable information. One way to think about it is to divide the state space into finitely many regions and record the sequence of regions visited. Positive entropy means that, for a suitable partition, the uncertainty of these records grows at a positive asymptotic rate. This is not thermodynamic entropy.</p>
+    <p>A theorem of <strong>Ledrappier and Young</strong> supplies the crucial final bridge: for the smooth systems in question, measurable information that is constant along complete unstable leaves belongs to the maximal zero-entropy factor, called the <em>Pinsker factor</em>. Since our readout collapses those leaves almost everywhere, the output must have zero metric entropy.</p>
+    <p>But exact realization requires the output to reproduce the prescribed target dynamics, including its entropy. Reversing an invertible, measure-preserving system leaves that entropy unchanged. The target has positive entropy, so the output must have positive entropy too. That is the contradiction.</p>
+    <div class="entropy-contrast"><div><span>Leaf collapse + entropy theorem</span><strong>\(\text{Output entropy} = 0\)</strong></div><div><span>Exact reversed chaotic dynamics</span><strong>\(\text{Output entropy} > 0\)</strong></div></div>
+    <p>The hypothetical generator could still have chaotic hidden dynamics. The contradiction concerns <strong>what its output can reveal</strong>, not a claim that all internal entropy disappears.</p>
+    <details><summary>The invariant measure and the entropy bridge</summary><div class="detail-body"><p>Start by lifting the target measure <span class="inline-math">\(\mu\)</span> to the generator’s attracting set. Averaging its iterates gives an invariant measure; an ergodic component still projects to <span class="inline-math">\(\mu\)</span>, since the target measure is ergodic. Call it <span class="inline-math">\(\nu\)</span>. Exact reversal gives <span class="inline-math">\(h_{\mathrm{out}} = h_\mu(f^{-1}) = h_\mu(f) > 0\)</span>.</p><p>Ledrappier–Young’s Theorem B identifies the completed sigma-algebra of measurable unions of complete unstable leaves with the Pinsker sigma-algebra, modulo <span class="inline-math">\(\nu\)</span>. Each atom of a finite output partition pulls back to such a union, up to a null set, so every observable partition has zero entropy rate. Taking their supremum gives <span class="inline-math">\(h_{\mathrm{out}} = 0\)</span>. The result is applied to the ambient smooth system; the attractor itself need not be a manifold. Zero Lyapunov exponents and measures without full support are allowed. See Section III.4 of the <a href="https://arxiv.org/html/2610.02845v1" target="_blank" rel="noopener">paper</a>.</p></div></details>
+  </div></section>
+</section>
+<section id="lorenz">
+  <h2>Why the Lorenz attractor fits</h2>
+  <p>The classical Lorenz attractor carries an ergodic measure with positive entropy. Its stable geometry provides the other ingredient: its intersection with a local strong-stable curve contains no nontrivial interval. On a one-dimensional curve, a connected subset with more than one point would contain an interval, so this intersection is totally disconnected.</p>
+  <p>The paper also establishes the necessary link between those geometric intersections and the intrinsic, synchronously converging stable fibers of a sampled flow. That step matters: a fractal-looking picture alone does not verify the theorem’s hypothesis. Together, the geometric and entropy properties rule out an exact attracting realization of the reversed Lorenz motion within the stated class.</p>
+</section>
+<section id="meaning">
+  <h2>What this says about learning</h2>
+  <p>The result separates fitting observed motion from constructing a system that sustains it. Changing a training algorithm or adding more finite-dimensional latent variables cannot create an exact attracting realization that the theorem excludes.</p>
+  <p>The paper’s paired reservoir examples illustrate the distinction. Both models closely track their prescribed signals while driven by data. After feedback closes, the forward example retains the Lorenz-like geometry over the plotted interval, whereas the reversed example develops a large oscillation.</p>
+  <p>Those finite-time examples are illustrations, not the proof. They do not establish asymptotic attraction, and the particular discrete reservoir updates are not shown to satisfy the theorem’s global diffeomorphism assumptions. The mathematical claim is about the specified class of exact attracting realizations.</p>
+  <aside class="scope-note"><h3>Exact realization is a demanding requirement</h3><p>The theorem does not forbid replaying a finite recording, predicting backward for a finite horizon, or approximating a reversed process. It does not supply an approximation-error bound. It also does not cover every chaotic target or arbitrary digital, stochastic, externally driven, or infinite-dimensional generators.</p><p>Its arrow of time belongs to a precise dynamical realization problem. Understanding how that obstruction influences practical approximation and learning remains a further question.</p></aside>
+  <p>For me, the compelling lesson is that stable autonomous generation depends on more than whether we can fit a trajectory. The geometry of the desired dynamics constrains what a smooth system can realize—and continuity and entropy make those constraints visible.</p>
+</section>
+<section class="article-sources" aria-labelledby="sources-title">
+  <h2 id="sources-title">Paper &amp; related reading</h2>
+  <p>This article explains my <a href="https://arxiv.org/abs/2610.02845" target="_blank" rel="noopener">An Arrow of Time in Stable Autonomous Generation</a>, arXiv:2610.02845v1 (October 2, 2026). The full hypotheses, proof, Lorenz application, and numerical protocols are in the <a href="https://arxiv.org/html/2610.02845v1" target="_blank" rel="noopener">HTML paper</a> and <a href="https://arxiv.org/pdf/2610.02845v1" target="_blank" rel="noopener">PDF</a>. This is a preprint.</p>
+  <p>For the complementary constructive perspective: <a href="https://doi.org/10.1063/1.5039508" target="_blank" rel="noopener">Attractor reconstruction by machine learning</a> and <a href="https://doi.org/10.1063/5.0004344" target="_blank" rel="noopener">Invertible generalized synchronization</a>, both published in <em>Chaos</em>. See also my <a href="../recurrent-prediction-generalized-synchronization/">introduction to recurrent prediction and synchronization</a>.</p>
+</section>
+</article>
+</div>
+</main>
+<footer><div class="container"><p>&copy; 2026 Zhixin Lu · <a href="../../blog.html">All writing</a> · <a href="mailto:zhixin.lu@alleninstitute.org">zhixin.lu@alleninstitute.org</a></p></div></footer>
+</body>
+</html>

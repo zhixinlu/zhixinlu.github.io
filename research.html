@@ -4,119 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Research — Zhixin Lu</title>
+<meta name="description" content="Building intelligent dynamical systems: principles of computation and learning, inference of hidden states and laws, and physical AI.">
 <link rel="icon" href="assets/img/NewMobius.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-
-<nav class="nav">
-  <div class="container">
-    <a class="brand" href="index.html"><img src="assets/img/NewMobius.png" alt="logo"> Zhixin Lu</a>
-    <div class="links">
-      <a href="index.html">Home</a>
-      <a href="research.html" class="active">Research</a>
-      <a href="publications.html">Publications</a>
-      <a href="blog.html">Blog</a>
-      <a href="press.html">Press</a>
-      <a href="cv.html">CV</a>
-    </div>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Main navigation"><div class="container"><a class="brand" href="index.html"><img src="assets/img/NewMobius.png" alt="" width="36" height="36"> Zhixin Lu</a><div class="links"><a href="index.html">Home</a><a href="research.html" class="active" aria-current="page">Research</a><a href="publications.html">Publications</a><a href="blog.html">Blog</a><a href="press.html">Press</a><a href="cv.html">CV</a></div></div></nav>
+<main id="main">
+<header class="hero research-hero"><div class="container"><div><p class="eyebrow">Research</p><h1>Building intelligent<br><em>dynamical systems.</em></h1><p class="lede">Biological and artificial intelligence operate through evolving internal states. I study how those states support computation and learning, and how AI can reveal the dynamics of the world.</p><div class="inline-links"><a href="#dynamics-for-ai">Dynamics for AI ↓</a><a href="#ai-for-dynamics">AI for dynamics ↓</a><a href="#physical-ai">Physical AI ↓</a></div></div></div></header>
+<section class="block" id="program-map" aria-labelledby="map-title"><div class="container research-map">
+  <figure><a href="assets/img/research-program.png" target="_blank" rel="noopener" aria-label="Open full-size research program figure"><picture><source srcset="assets/img/research-program.webp" type="image/webp"><img src="assets/img/research-program.png" alt="Data, density, and dynamics form a triangle around a Möbius strip linking Dynamics for AI and AI for Dynamics." width="1531" height="1027"></picture></a><figcaption>Research program · <a href="assets/img/research-program.png" target="_blank" rel="noopener">View full size ↗</a></figcaption></figure>
+  <div><p class="eyebrow">A common map</p><h2 id="map-title" class="editorial-title">Two directions,<br>one program.</h2><p><strong>Dynamics for AI</strong> uses dynamical principles to understand and build intelligent systems. <strong>AI for dynamics</strong> develops methods to infer hidden states and dynamical laws.</p><p>Data, density, and dynamics connect these directions. Different observations support different tasks, from recovering missing variables to learning laws and generating temporal patterns.</p><p class="muted">The figure is a conceptual map. Its connections are intentionally undirected; the available information and the question determine the route.</p></div>
+</div></section>
+<section class="block" id="dynamics-for-ai" aria-labelledby="dynamics-title"><div class="container">
+  <p class="direction-index">01 <span aria-hidden="true">/</span> Dynamics for AI</p><h2 id="dynamics-title" class="editorial-title">Principles for intelligent computation</h2><p class="section-sub research-lede">How do the geometry and evolution of computational states determine what a system can remember, infer, generate, and learn?</p>
+  <div class="research-topics">
+    <article><h3>Representation, memory &amp; adaptation</h3><p>I study recurrent networks, attention, and adaptive systems as evolving computational states. My goal is to connect their capacity, geometry, and stability with the computations they can perform, and to use those principles to guide architecture design.</p><a class="text-link" href="blog/attention-energy-landscape/">A geometric view of attention →</a></article>
+    <article><h3>Synchronization &amp; learned dynamics</h3><p>Under suitable conditions, a driven network can form an invertible representation of another system’s state. My work on attractor reconstruction and generalized synchronization connects this mechanism to inference and generation, with stability essential when a model runs on its own.</p><a class="text-link" href="blog/recurrent-prediction-generalized-synchronization/">How recurrent models learn dynamics →</a></article>
+    <article class="topic-feature"><span class="status">New preprint</span><h3>Limits of stable generation</h3><p>Can a system stably generate a learned dynamical pattern backward in time? My recent theorem identifies an obstruction for a class of chaotic dynamics, including the classical Lorenz attractor. It applies to exact realization by finite-dimensional C<sup>2</sup> autonomous systems with compact attracting sets and continuous readouts.</p><a class="text-link" href="https://arxiv.org/abs/2610.02845" target="_blank" rel="noopener">An Arrow of Time in Stable Autonomous Generation ↗</a><br><a class="text-link" href="blog/arrow-of-time/">The intuition behind the proof →</a></article>
   </div>
-</nav>
-
-<header class="hero" style="padding:48px 0 40px">
-  <div class="container" style="grid-template-columns:1fr">
-    <div>
-      <h1>Research</h1>
-      <p class="lede">
-        A dynamical-systems and stochastic-process foundation for intelligence —
-        spanning theory, algorithms, and neuroscience.
-      </p>
-    </div>
+</div></section>
+<section class="block" id="ai-for-dynamics" aria-labelledby="inference-title"><div class="container">
+  <p class="direction-index">02 <span aria-hidden="true">/</span> AI for dynamics</p><h2 id="inference-title" class="editorial-title">From observations to states and laws</h2><p class="section-sub research-lede">What dynamical structure can incomplete observations reveal, and what remains ambiguous?</p>
+  <div class="research-topics">
+    <article><h3>Hidden states &amp; source separation</h3><p>Reservoir observers infer unmeasured variables from partial observations. Related work uses synchronized representations to separate mixed sources and identify dynamics. I study when temporal structure makes these tasks possible.</p><a class="text-link" href="https://doi.org/10.1063/1.4979665" target="_blank" rel="noopener">Reservoir observers ↗</a></article>
+    <article><h3>Dynamical laws from snapshots</h3><p>Measurements often sample a population without tracking its individuals. My DyNoSeD framework uses Fokker–Planck constraints to infer stochastic dynamics from stationary, non-sequential samples and assess which parameters the observations constrain within a specified model.</p><a class="text-link" href="https://doi.org/10.1063/5.0314136" target="_blank" rel="noopener">DyNoSeD in Chaos ↗</a><br><a class="text-link" href="blog/dynosed/">The intuition &amp; an interactive example →</a></article>
+    <article><h3>Biological dynamics</h3><p>Neuroscience provides a demanding setting for these questions, from single-neuron models to the relationship between cell types and physiology. I connect mathematical descriptions with what biological measurements can establish.</p><a class="text-link" href="publications.html#neuron-models">Recent neuroscience studies →</a></article>
   </div>
-</header>
-
-<section class="block">
-  <div class="container">
-    <h2 class="section-title">Dynamical <span class="accent">AI</span></h2>
-    <p style="max-width:820px">
-      How do learning machines infer, store, and reproduce dynamics? I study recurrent neural
-      networks and reservoir computers as dynamical systems, showing how they learn global
-      temporal structure from local examples, reconstruct chaotic attractors, and implement
-      implicit learning through <em>invertible generalized synchronization</em>. More recently,
-      I develop energy-landscape and geometric views of modern architectures such as transformers.
-    </p>
-    <div class="cards" style="margin-top:22px">
-      <div class="card">
-        <h3>Attention as landscape hopping</h3>
-        <p>Self-attention re-derived as a CCCP step on a Gaussian-mixture energy landscape.
-           <a href="blog/attention-energy-landscape/">See the interactive write-up →</a></p>
-      </div>
-      <div class="card">
-        <h3>Reservoir computing theory</h3>
-        <p>Why reservoir computers predict chaos so well, and the dynamical capacity that lets
-           them replicate attractors and compute Lyapunov exponents from data.</p>
-      </div>
-      <div class="card">
-        <h3>Invertible generalized synchronization</h3>
-        <p>A putative mechanism for implicit learning in biological and artificial neural systems.</p>
-      </div>
-      <div class="card">
-        <h3>Teaching RNNs global structure</h3>
-        <p>Recurrent networks that infer global temporal structure from purely local examples
-           (<em>Nature Machine Intelligence</em>, 2020).</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="block">
-  <div class="container">
-    <h2 class="section-title">AI for <span class="accent">Dynamics</span></h2>
-    <p style="max-width:820px">
-      I build AI that understands, predicts, and controls the dynamical world — including
-      model-free prediction of large spatiotemporally chaotic systems, inference of unmeasured
-      variables (<em>reservoir observers</em>), chaotic source separation, and identifying
-      stochastic dynamics from <strong>non-sequential</strong> data.
-    </p>
-    <div class="cards" style="margin-top:22px">
-      <div class="card">
-        <h3>Learning dynamics from non-temporal data</h3>
-        <p>DyNoSeD: identifying stochastic dynamics from snapshots that carry no time ordering.</p>
-      </div>
-      <div class="card">
-        <h3>Chaotic source separation</h3>
-        <p>Supervised separation of mixed chaotic signals — solved by a literal tank of water.</p>
-      </div>
-      <div class="card">
-        <h3>Model-free chaos prediction</h3>
-        <p>Reservoir-computing prediction of large spatiotemporally chaotic systems from data.</p>
-      </div>
-      <div class="card">
-        <h3>Cell types &amp; single-neuron dynamics</h3>
-        <p>Differentiable biologically-derived neuron models and the role of cell types in
-           describing physiological features.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="block">
-  <div class="container">
-    <h2 class="section-title">Neuroscience of <span class="accent">dynamics</span></h2>
-    <p style="max-width:820px">
-      Working at the Allen Institute, I connect these ideas to how brains represent and forecast
-      the dynamical world — from the hierarchy of chaotic dynamics in modular networks to
-      control-energy landscapes in the human brain.
-    </p>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <p>&copy; 2026 Zhixin Lu · <a href="mailto:zhixin.lu@alleninstitute.org">zhixin.lu@alleninstitute.org</a> ·
-    <a href="https://scholar.google.com/citations?hl=en&amp;user=ZnBE8XUAAAAJ" target="_blank" rel="noopener">Google Scholar</a></p>
-  </div>
-</footer>
-
+</div></section>
+<section class="block physical-section" id="physical-ai" aria-labelledby="physical-title"><div class="container physical-research">
+  <div><p class="eyebrow">A central research interest</p><h2 id="physical-title" class="editorial-title">Physical AI<br><em>&amp; learning</em></h2></div>
+  <div><p class="research-question">How does the physics of a system shape its capacity to compute, adapt, and learn?</p><p>I am interested in the foundations of intelligent computation and learning in physical systems: how dynamics, stability, and the constraints of a physical medium shape capability, robustness, and energy efficiency.</p><p>My published source-separation study used <strong>simulated water dynamics</strong> as a computational substrate. A trained readout recovered chaotic sources from the simulated response to their mixture. This work motivates broader questions at the intersection of physics and intelligent computation.</p><a class="text-link" href="https://doi.org/10.1063/1.5142462" target="_blank" rel="noopener">Supervised chaotic source separation by a tank of water ↗</a></div>
+</div></section>
+</main>
+<footer><div class="container"><p>&copy; 2026 Zhixin Lu · <a href="mailto:zhixin.lu@alleninstitute.org">zhixin.lu@alleninstitute.org</a> · <a href="https://scholar.google.com/citations?hl=en&amp;user=ZnBE8XUAAAAJ" target="_blank" rel="noopener">Google Scholar</a></p></div></footer>
 </body>
 </html>

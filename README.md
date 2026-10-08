@@ -1,58 +1,35 @@
 # Zhixin Lu — Personal Academic Website
 
-A static personal/academic website (plain HTML + CSS, no build step) designed for
-**GitHub Pages**. Theme inspired by the "AI for Dynamics · Dynamics for AI" ring logo.
+A static academic website for GitHub Pages, using HTML, CSS, and a small amount of JavaScript. No build step or external runtime dependencies are required.
 
-## Structure
+## Pages
 
-```
-index.html            Home (hero, about, research directions, latest talk)
-research.html         Research: Dynamical AI + AI for Dynamics
-publications.html     Selected & recent papers (links to Google Scholar)
-blog.html             Blog / talks index
-press.html            Media coverage
-cv.html               CV summary (+ link to PDF)
-assets/
-  css/style.css       Shared stylesheet
-  img/logo.svg        Placeholder ring logo  ← replace with your real logo
-  cv/                 Put Zhixin_Lu_CV.pdf here
-blog/attention-energy-landscape/
-  index.html          Blog post wrapper (Santa Fe Institute, May 2026)
-  talk.html           ← replace with your Downloads/index.html (the essay)
-  visualization.html  Interactive Synchronize-or-Hop landscape visualization
-```
+- `index.html`: research vision, program figure, recent updates, featured preprint, background, and writing.
+- `research.html`: dynamics for AI, AI for dynamics, and physical AI and learning.
+- `publications.html`: selected papers with explicit preprint, submission, and acceptance statuses.
+- `cv.html`: background and the downloadable CV in `assets/cv/`.
+- `blog.html`, `blog/`, and `press.html`: research explainers, interactive essays, and coverage.
+- `blog/dynosed/`: stationary-data DyNoSeD explainer with the October 2 BPPB talk and an original probability-current demo. The two Lorenz PNG panels come from the author’s supplied poster.
+- `blog/arrow-of-time/`: an intuitive guide to the recent theorem and proof.
 
-## Things to add
+Shared styling is in `assets/css/style.css`. The homepage figure viewer is in `assets/js/site.js`; its image link still works without JavaScript. The native dialog supports Escape, focus restoration, and a close button.
 
-1. **Your CV PDF** — drop it at `assets/cv/Zhixin_Lu_CV.pdf`.
-2. **Your talk essay** — replace `blog/attention-energy-landscape/talk.html` with the
-   `index.html` you built for the Santa Fe talk. It will then embed on the blog post page.
+The two research explainers use LaTeX expressions rendered as SVG by the bundled MathJax 3.2.2 TeX component. Configuration is in `assets/js/math-config.js`; the renderer and its Apache 2.0 license are in `assets/vendor/mathjax-3.2.2/`. The SVG font paths are bundled, so math rendering needs no external CDN or web-font request. Inline expressions use `\(...\)` and display equations use `\[...\]`.
 
-The ring logo/image lives at `assets/img/ring.png` and is used as the hero image and brand mark.
+## Research figure
 
-## Deploy to GitHub Pages
-
-1. Create a new public repo, e.g. `your-username.github.io` (for a user site) or
-   `personal-website` (for a project site).
-2. From this folder:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial personal website"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<repo>.git
-   git push -u origin main
-   ```
-3. On GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**,
-   select `main` / `(root)`, save.
-4. Visit `https://<your-username>.github.io/` (user site) or
-   `https://<your-username>.github.io/<repo>/` (project site).
-
-`.nojekyll` is included so GitHub Pages serves all files as-is (no Jekyll processing).
+`assets/img/research-program.png` is the author's Figure 1 artwork, used without compositional changes. `research-program.webp` is a smaller web encoding at the same pixel dimensions. The original PNG is available from the research page. The figure is a conceptual map of data, density, and dynamics; its connections are intentionally undirected.
 
 ## Local preview
 
+From this directory:
+
 ```bash
-python3 -m http.server 8000
-# open http://localhost:8000
+python3 -m http.server 8765 --bind 127.0.0.1
 ```
+
+Visit `http://127.0.0.1:8765/`. Check the homepage, Research, Publications, and CV at desktop and phone widths before publishing.
+
+## Publishing
+
+The existing repository is `zhixinlu/zhixinlu.github.io`. `.nojekyll` serves the files directly through GitHub Pages. Preview changes locally and review them before committing or pushing to the branch configured for Pages.
