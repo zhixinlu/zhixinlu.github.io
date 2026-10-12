@@ -1,6 +1,6 @@
 %==============================================================================
 %  Zhixin Lu — Curriculum Vitae
-%  Compile with:  pdflatex Zhixin_Lu_CV.tex   (run twice for the page footer)
+%  Compile with pdfLaTeX (run twice). Public website version: Zhixin_Lu_CV.tex
 %
 %  Structure of this file
 %    1. Preamble ....... packages, colors, fonts, section styling
@@ -15,7 +15,7 @@
 
 %------------------------------ 1. Preamble -----------------------------------
 % Engine-robust font setup: compiles with pdflatex, xelatex, or lualatex so the
-% accented names (Kuśmierz, Łukasz, Cardeña, Görring) and em dashes just work.
+% accented names (Kuśmierz, Łukasz, Cardeña, Göring) and em dashes just work.
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[utf8]{inputenc}    % UTF-8 source (handles ś, Ł, ñ, ö, ...)
@@ -29,6 +29,7 @@
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
+\usepackage{needspace}
 \usepackage{fancyhdr}
 \usepackage[hidelinks]{hyperref}
 
@@ -44,11 +45,12 @@
   pdfauthor={Zhixin Lu}
 }
 
-% --- Section headings: small caps with a gold rule underneath ---
+% --- Section headings: bold with a gold rule underneath ---
 \titleformat{\section}
-  {\large\bfseries\scshape\color{ink}}
+  {\large\bfseries\color{ink}}
   {}{0pt}{}[{\color{accent}\titlerule[1.1pt]}]
-\titlespacing*{\section}{0pt}{16pt}{6pt}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{5pt}
 
 % --- Page footer:  "Zhixin Lu" left, page number right ---
 \pagestyle{fancy}
@@ -89,18 +91,21 @@
 
 % Compact bullet list preset used for awards / reviewing.
 \newlist{tight}{itemize}{1}
-\setlist[tight]{leftmargin=1.4em, itemsep=3pt, topsep=4pt, parsep=0pt}
+\setlist[tight]{label=\textbullet, leftmargin=1.4em, itemsep=3pt, topsep=4pt, parsep=0pt}
 
 %------------------------------ 3. Document -----------------------------------
+% Keep section headings with their opening content.
+\let\cvOriginalSection\section
+\renewcommand{\section}{\Needspace{5\baselineskip}\cvOriginalSection}
 \begin{document}
 
 %--- Header -------------------------------------------------------------------
 \begin{minipage}[t]{0.72\textwidth}
   {\LARGE\bfseries Zhixin Lu, Ph.D.}\\[3pt]
-  {\large Scientist @ Allen Institute}
+  {\large Scientist II, Allen Institute}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.26\textwidth}
-  \raggedleft\small Prepared: October 8, 2026
+  \raggedleft\small Updated: October 12, 2026
 \end{minipage}
 
 \medskip
@@ -149,8 +154,13 @@ nonlinearly evolving units.''}
 
 \entry{\textbf{Shandong Normal University}, Shandong, China — B.S.\ in Physics}{2006 -- 2010}
 
+%--- Research software --------------------------------------------------------
+\section{Research Software}
+Develops recurrent-model research software and specialized GPU implementations,
+connecting dynamical theory with efficient computation.
+
 %--- Publications -------------------------------------------------------------
-\section{Publications \textnormal{\normalsize ($>$4000 citations)}}
+\section{Publications \textnormal{\normalsize (\texorpdfstring{$>$}{>}4000 citations)}}
 
 \subsection*{Published / In Press}
 \begin{publist}
@@ -190,7 +200,7 @@ nonlinearly evolving units.''}
   \emph{Chaos} 30, no.\ 6 (2020): 063133.
 \pub{11} Aaron F.\ Alexander-Bloch, Armin Raznahan, Simon N.\ Vandekar, Jakob Seidlitz,
   \textbf{Zhixin Lu}, Samuel R.\ Mathias, Emma Knowles, Josephine Mollon, Amanda Rodrigue,
-  Joanne E.\ Curran, Harald H.\,H.\ Görring, Theodore D.\ Satterthwaite, Raquel E.\ Gur,
+  Joanne E.\ Curran, Harald H.\,H.\ Göring, Theodore D.\ Satterthwaite, Raquel E.\ Gur,
   Danielle S.\ Bassett, Gil D.\ Hoftman, Godfrey Pearlson, Russell T.\ Shinohara,
   Siyuan Liu, Peter T.\ Fox, Laura Almasy, John Blangero, and David C.\ Glahn.
   ``Imaging Local Genetic Influences on Cortical Folding.''
@@ -238,7 +248,7 @@ nonlinearly evolving units.''}
   Preprint: \href{https://doi.org/10.64898/2026.08.27.744753}{bioRxiv: 2026.08.27.744753} (2026).
 \end{publist}
 
-\subsection*{Preprints / Non-peer Reviewed}
+\subsection*{Preprints / Non-Peer-Reviewed Work}
 \begin{publist}
 \pub{2} \textbf{Zhixin Lu}. ``An Arrow of Time in Stable Autonomous Generation.''
   \href{https://arxiv.org/abs/2610.02845}{arXiv:2610.02845} (2026).
@@ -280,11 +290,11 @@ nonlinearly evolving units.''}
   Machine Learning Method.'' SIAM Conference on Applications of Dynamical Systems (DS21),
   Online}{2021}
 \entry{``Chaotic source separation solved by a tank of water through invertible generalized
-  synchronization.'' APS March Meeting, Denver, CO}{2020}
+  synchronization.'' APS March Meeting, Denver, CO (accepted talk; meeting canceled)}{2020}
 \entry{``Why do reservoir computing networks predict chaotic systems so well.''
   APS March Meeting, New Orleans, LA}{2017}
 \entry{``Inhibitory neurons promote robust critical firing dynamics in networks of
-  integrate-and-fire neurons.'' Dynamics Day, Silver Spring, MD}{2017}
+  integrate-and-fire neurons.'' Dynamics Days, Silver Spring, MD}{2017}
 
 \subsection*{Award-Winning Posters}
 \entry{``Resynchronization of circadian oscillators and the east-west asymmetry of jet-lag.''
@@ -294,24 +304,24 @@ nonlinearly evolving units.''}
 \section{Teaching Experience}
 
 \subsection*{Students Advised — Allen Institute, Seattle, WA}
-\entry{Harshil Sharma, Undergraduate @ University of Washington}{2023 -- present}
-\entry{Calvin Yeung, Ph.D.\ Student, Math \& Computer Science @ UC Irvine.
+\entry{Harshil Sharma, Undergraduate, University of Washington}{2023 -- present}
+\entry{Calvin Yeung, Ph.D.\ Student, Math \& Computer Science, UC Irvine.
   \emph{The role of temporal complexity in neuronal computations.}}{Summer 2023}
-\entry{Rachel Ding, Undergraduate, Computation \& Neural Systems @ Caltech.
+\entry{Rachel Ding, Undergraduate, Computation \& Neural Systems, Caltech.
   \emph{Modeling single neuron dynamics using electrophysiological data.}}{Summer 2022}
 
-\subsection*{Students Advised — University of Pennsylvania, Philadelphia, PA}
-\entry{Jason Z.\ Kim, Ph.D.\ Student of Bioengineering.
+\subsection*{Students Mentored — University of Pennsylvania, Philadelphia, PA}
+\entry{Jason Z.\ Kim, Ph.D.\ Student in Bioengineering (co-mentored).
   \emph{Reservoir computing; nonlinear dynamical systems and chaos.}}{2017 -- 2020}
-\entry{William Qian, Undergraduate of Physics \& Computer Science.
+\entry{William Qian, Undergraduate in Physics \& Computer Science.
   \emph{Path-dependent dynamics in networks of oscillators.}}{2019 -- 2020}
-\entry{Lindsay M.\ Smith, Undergraduate of Physics.
+\entry{Lindsay M.\ Smith, Undergraduate in Physics (co-mentored).
   \emph{Dynamical capacity of reservoir computers.}}{2021 -- 2022}
 
 \subsection*{Students Advised — University of Maryland, College Park, MD}
-\entry{Steven Lee, Summer Undergraduate of Physics \& Math.
+\entry{Steven Lee, Summer Undergraduate in Physics \& Math.
   \emph{Modeling the dynamics of jet-lag recovery.}}{Summer 2015}
-\entry{Kevin Klein-Cardeña, Summer Undergraduate of Math.
+\entry{Kevin Klein-Cardeña, Summer Undergraduate in Math.
   \emph{Modeling the dynamics of jet-lag recovery.}}{Summer 2015}
 
 \subsection*{Teaching Assistant — University of Maryland, College Park, MD \textnormal{\small (2011 -- 2017)}}
@@ -330,7 +340,7 @@ nonlinearly evolving units.''}
 \entry{Most downloaded and cited articles in \emph{Chaos}}{2018}
 \entry{Most downloaded articles in \emph{Chaos}}{2017}
 \entry{Best in Show Award, Summer Workshop on the Dynamic Brain, Friday Harbor, WA}{2017}
-\entry{Travel Award, Dynamics Day, Silver Spring, MD}{2017}
+\entry{Travel Award, Dynamics Days, Silver Spring, MD}{2017}
 \entry{1st Place Poster Prize, IPST Spring Banquet, University of Maryland, College Park, MD}{2016}
 \entry{Merit Fellowship Award, University of Maryland, College Park, MD}{2013}
 \entry{Dean's Fellowship Award, University of Maryland, College Park, MD}{2011}
@@ -374,8 +384,7 @@ Reviewer for 15 journals: \emph{Physical Review Letters}; \emph{Nature Machine I
 \emph{Earth System Dynamics}; \emph{Entropy}; \emph{Electronics}; \emph{Philosophies}.
 
 \subsection*{Other}
-Invited panelist, ``The Ability of Artificial Intelligence Algorithms in New Computer
-Experiments to Tell the Future of Chaotic [Systems]'' —
+Invited panelist on artificial intelligence for predicting chaotic systems —
 \href{https://globalinsurancesummit2019.com/speakers/}{2019 Global Insurance Summit},
 New York City, NY.
 
